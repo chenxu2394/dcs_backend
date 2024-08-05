@@ -22,7 +22,7 @@
 1. Project should use CLEAN architecture, proper naming convention, security, and comply with Rest API. In README file, explain the structure of your project as well.
     - PS: you could use the normal layered architecture (Controller, Service, and Repo) However, it is recommended to practice the CLEAN architecture
 2. Error handler: This will ensure any exceptions thrown in your application are handled appropriately and helpful error messages are returned.
-3. `README` file should sufficiently describe the project, as well as the deployment, link to frontend github.
+3. `README` file should sufficiently describe the project, as well as the deployment.
 
 
 #### How to work as a team
