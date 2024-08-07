@@ -1,19 +1,23 @@
 package com.backend.ecommerce.domain.entities;
 
 import com.backend.ecommerce.domain.enums.UserRole;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
+@Table(name = "user", schema = "ecommerce")
+@Setter
 @Getter
-@AllArgsConstructor
 public class User {
-    private final int id;
-    @Setter
+    @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    private int id;
     private String name;
-    @Setter
     private String email;
-    @Setter
     private String password;
-    private final UserRole userRole;
+//    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
+//    @Column(name = "type")  // Maps to the 'type' column in the SQL table
+//    private UserRole userRole;
+    private int type;
 }

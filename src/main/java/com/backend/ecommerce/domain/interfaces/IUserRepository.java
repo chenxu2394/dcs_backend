@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface IUserRepository {
     public List<User> getAllUsers();
-    public Optional<User> getUserById(int id);
-    public boolean createUser(User user);
-    public boolean updateUser(User user);
-    public boolean deleteUser(int id);
+//    public Optional<User> getUserById(int id);
+//    public boolean createUser(User user);
+//    public boolean updateUser(User user);
+//    public boolean deleteUser(int id);
 }
