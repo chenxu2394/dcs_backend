@@ -18,7 +18,7 @@ public class UserController {
         this.jpaUserRepository = jpaUserRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<User>> getUser(){
         //Shortcut, using the DB directly
         var result = jpaUserRepository.findAll().stream().toList();

@@ -2,11 +2,9 @@ package com.backend.ecommerce.infastructure.repositories;
 
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.IUserRepository;
-import com.backend.ecommerce.infastructure.Database;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserRepository implements IUserRepository {

@@ -1,9 +1,8 @@
 package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.application.ProductService;
+import com.backend.ecommerce.application.dto.CreateProductRequest;
 import com.backend.ecommerce.domain.entities.Product;
-import com.backend.ecommerce.infastructure.jpaRepositories.JpaProductRepository;
-import com.backend.ecommerce.infastructure.repositories.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,27 +12,33 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-//    private final ProductService productService;
-    private final JpaProductRepository jpaProductRepository;
+    private final ProductService productService;
 
-
-    public ProductController(JpaProductRepository jpaProductRepository) {
-//        this.productService = productService;
-        this.jpaProductRepository = jpaProductRepository;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Product>> getProduct(){
-        //Shortcut, using the DB directly
-        var result = jpaProductRepository.findAll().stream().toList();
+        var products = productService.getAllProducts();
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(products);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
-        jpaProductRepository.save(product);
+    @PostMapping()
+    public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequest product){
+        var result = productService.addProduct(product);
 
-        return ResponseEntity.ok(product);
+        return result.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") int id){
+        var product = productService.getProductById(id);
+
+        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 }
