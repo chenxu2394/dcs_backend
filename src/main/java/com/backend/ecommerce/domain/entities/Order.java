@@ -1,11 +1,7 @@
 package com.backend.ecommerce.domain.entities;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,25 +9,26 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "order", schema = "ecommerce")
 public class Order {
   @Id
+  @NonNull
   @GeneratedValue(strategy = GenerationType.UUID)
-  public UUID id;
+  private UUID id;
 
-  @Column(nullable = false)
-  public User user;
+  @NonNull
+  private User user;
 
-  @Column(nullable = false)
-  public List<Product> products;
+  @NonNull
+  private List<Product> products;
 
-  @Column(nullable = false)
-  public String city;
+  @NonNull
+  private String city;
 
-  @Column(nullable = false)
-  public String street;
+  @NonNull
+  private String street;
 
-  @Column(nullable = false)
-  public String post_number;
+  @NonNull
+  private String post_number;
 }
