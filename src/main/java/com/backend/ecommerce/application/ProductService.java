@@ -39,7 +39,7 @@ public class ProductService {
             return Optional.empty();
         }
 
-        newProduct.setCategory(category.get());
+        newProduct.setCategory_Id(category.get().getId());
         return Optional.ofNullable(productRepository.addProduct(newProduct));
     }
     public Optional<Product> updateProduct(Product product) {

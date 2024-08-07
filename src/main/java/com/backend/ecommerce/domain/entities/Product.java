@@ -10,14 +10,11 @@ import lombok.Setter;
 @Getter
 public class Product {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private int id;
     private String name;
     private int quantity;
     private double price;
     private int discount;
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "category_id",nullable = false)
-    private Category category;
+    private int category_Id;
 }
