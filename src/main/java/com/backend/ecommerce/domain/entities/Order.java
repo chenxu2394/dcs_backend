@@ -3,32 +3,31 @@ package com.backend.ecommerce.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @Table(name = "order", schema = "ecommerce")
 public class Order {
   @Id
-  @NonNull
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private int id;
 
-  @NonNull
+  @OneToOne
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  @NonNull
-  private List<Product> products;
+  @ManyToMany
+  @JoinTable(
+          name = "order_product",
+          joinColumns = @JoinColumn(name = "order_id"),
+          inverseJoinColumns = @JoinColumn(name = "product_id")
+  )
+  private List<Product> products = new ArrayList<>();
 
-  @NonNull
   private String city;
-
-  @NonNull
   private String street;
-
-  @NonNull
   private String post_number;
 }
