@@ -2,6 +2,7 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.Order;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.OrderListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class OrderController {
   private OrderService orderService;
 
   @GetMapping
-  public List<Order> findAll() {
+  public List<OrderListDto> findAll() {
     return orderService.getAllOrders();
   }
 

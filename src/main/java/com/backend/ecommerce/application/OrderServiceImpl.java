@@ -2,6 +2,7 @@ package com.backend.ecommerce.application;
 
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.Order;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.OrderListDto;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,8 @@ public class OrderServiceImpl implements OrderService {
   private JpaOrderRepository jpaRepo;
 
   @Override
-  public List<Order> getAllOrders() {
-    System.out.println(jpaRepo.findAll());
-    return jpaRepo.findAll();
+  public List<OrderListDto> getAllOrders() {
+    return jpaRepo.getAllOrders();
   }
 
   @Override

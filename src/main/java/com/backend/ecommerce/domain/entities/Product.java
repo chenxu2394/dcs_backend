@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "product", schema = "ecommerce")
@@ -21,11 +20,7 @@ public class Product {
     private double price;
     private int discount;
     private String description;
-    @ManyToMany
-    @JoinTable(
-            name = "order_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
-    )
-    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 }

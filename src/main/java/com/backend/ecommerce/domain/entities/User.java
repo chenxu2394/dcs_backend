@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user", schema = "ecommerce")
 @Setter
@@ -12,12 +14,23 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column(name = "id")
     private int id;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="email")
     private String email;
+
+    @Column(name="password")
     private String password;
 //    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
 //    @Column(name = "type")  // Maps to the 'type' column in the SQL table
 //    private UserRole userRole;
+    @Column(name="type")
     private int type;
+
+    @OneToMany(mappedBy = "user")
+    List<Order> orders;
 }

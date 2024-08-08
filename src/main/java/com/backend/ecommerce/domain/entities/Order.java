@@ -12,22 +12,25 @@ import java.util.List;
 @Table(name = "order", schema = "ecommerce")
 public class Order {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @Column(name="id")
   private int id;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  @ManyToMany
-  @JoinTable(
-          name = "order_product",
-          joinColumns = @JoinColumn(name = "order_id"),
-          inverseJoinColumns = @JoinColumn(name = "product_id")
-  )
-  private List<Product> products = new ArrayList<>();
+  @OneToMany(mappedBy = "order")
+  private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 
+  @Column(name = "status")
+  private String status;
+
+  @Column(name = "city")
   private String city;
+
+  @Column(name = "street")
   private String street;
+
+  @Column(name = "postnumber")
   private String post_number;
 }
