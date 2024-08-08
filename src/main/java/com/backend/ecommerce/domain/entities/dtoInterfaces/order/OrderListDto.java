@@ -1,4 +1,4 @@
-package com.backend.ecommerce.domain.entities.dtoInterfaces;
+package com.backend.ecommerce.domain.entities.dtoInterfaces.order;
 
 public interface OrderListDto {
   int getId();

@@ -2,7 +2,8 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.Order;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.OrderListDto;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +26,8 @@ public class OrderController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<Order>> findOne(@PathVariable Integer id) {
-    Optional<Order> order = orderService.findOrder(id);
+  public ResponseEntity<Optional<SingleOrder>> findOne(@PathVariable Integer id) {
+    Optional<SingleOrder> order = orderService.findOrder(id);
     if (order.isEmpty()) {
       return ResponseEntity.notFound().build();
     }

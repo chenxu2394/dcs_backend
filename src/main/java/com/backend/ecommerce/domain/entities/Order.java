@@ -22,6 +22,10 @@ public class Order {
   @OneToMany(mappedBy = "order")
   private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 
+  @OneToOne
+  @JoinColumn(name = "payment_id", referencedColumnName = "id")
+  private Payment payment;
+
   @Column(name = "status")
   private String status;
 
