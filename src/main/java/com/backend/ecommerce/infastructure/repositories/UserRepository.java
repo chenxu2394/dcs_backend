@@ -6,6 +6,8 @@ import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.Optional;
 
 @Repository
 public class UserRepository implements IUserRepository {
@@ -21,12 +23,10 @@ public class UserRepository implements IUserRepository {
         return jpaUserRepository.findAll().stream().toList();
     }
 
-//    @Override
-//    public Optional<User> getUserById(int id) {
-//        return this.users.stream()
-//                .filter(user -> user.getId() == id)
-//                .findFirst();
-//    }
+    @Override
+    public Optional<User> getUserById(UUID id) {
+        return jpaUserRepository.findById(id);
+    }
 //
 //    @Override
 //    public boolean createUser(User user) {

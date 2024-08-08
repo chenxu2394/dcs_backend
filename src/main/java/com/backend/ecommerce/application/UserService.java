@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -20,9 +21,9 @@ public class UserService {
         return userRepository.getAllUsers();
     }
 //
-//    public Optional<User> getUserById(int id) {
-//        return userRepository.getUserById(id);
-//    }
+    public Optional<User> getUserById(UUID id) {
+        return userRepository.getUserById(id);
+    }
 //
 //    public boolean createUser(User user) {
 //        return userRepository.createUser(user);
