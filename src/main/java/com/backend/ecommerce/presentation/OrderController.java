@@ -18,7 +18,7 @@ public class OrderController {
   private OrderService orderService;
 
   @GetMapping
-  public List<OrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<Integer> id) {
+  public List<OrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<String> id) {
     System.out.println(status);
     if (status.isPresent()){
       return orderService.getAllOrdersByPaymentStatus(status.get());
@@ -30,7 +30,7 @@ public class OrderController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<SingleOrder>> findOne(@PathVariable Integer id) {
+  public ResponseEntity<Optional<SingleOrder>> findOne(@PathVariable String id) {
     Optional<SingleOrder> order = orderService.findOrder(id);
     if (order.isEmpty()) {
       return ResponseEntity.notFound().build();

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "product", schema = "ecommerce")
@@ -13,8 +14,8 @@ import java.util.List;
 @Getter
 public class Product {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private int quantity;
     private double price;

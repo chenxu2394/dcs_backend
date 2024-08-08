@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
@@ -29,7 +30,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "INNER JOIN ecommerce.payment AS p ON o.id = p.order_id " +
           "WHERE o.id = ?1;",
           nativeQuery = true)
-  public Optional<SingleOrder>getSingleOrder(int id);
+  public Optional<SingleOrder>getSingleOrder(UUID id);
 
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
@@ -48,5 +49,5 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "INNER JOIN ecommerce.payment AS p ON p.order_id = o.id\n" +
           "WHERE u.id = ?1;",
           nativeQuery = true)
-  public List<OrderListDto> getUsersOrders(int id);
+  public List<OrderListDto> getUsersOrders(UUID id);
 }

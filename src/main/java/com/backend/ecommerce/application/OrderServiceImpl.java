@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -21,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
     return jpaRepo.getAllOrders();
   }
   @Override
-  public List<OrderListDto> getUsersOrders(int id){
-    return jpaRepo.getUsersOrders(id);
+  public List<OrderListDto> getUsersOrders(String id){
+    return jpaRepo.getUsersOrders(UUID.fromString(id));
   }
 
   @Override
@@ -31,8 +32,8 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Optional<SingleOrder> findOrder(Integer id) {
-    return jpaRepo.getSingleOrder(id);
+  public Optional<SingleOrder> findOrder(String id) {
+    return jpaRepo.getSingleOrder(UUID.fromString(id));
   }
 
   @Override
@@ -42,9 +43,9 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Optional<Order> updateOrder(Order order) {
-    Optional<Order> foundOrder = jpaRepo.findById(order.getId());
-    if (foundOrder.isEmpty()) return Optional.empty();
-    jpaRepo.save(order);
+    //Optional<Order> foundOrder = jpaRepo.findById(order.getId());
+    //if (foundOrder.isEmpty()) return Optional.empty();
+    //jpaRepo.save(order);
     return Optional.empty();
   }
 
