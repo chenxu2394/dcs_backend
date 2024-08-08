@@ -10,8 +10,11 @@ import java.util.Optional;
 public interface OrderService {
   public List<OrderListDto> getAllOrders();
   public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status);
+  public List<OrderListDto> getUsersOrders(int id);
   public Optional<SingleOrder> findOrder(Integer id);
+
   public Order createNewOrder(Order order);
   public Optional<Order> updateOrder(Order order);
   public boolean deleteOrder(Integer id);
+
 }

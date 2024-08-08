@@ -18,19 +18,16 @@ public class OrderController {
   private OrderService orderService;
 
   @GetMapping
-  public List<OrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status) {
+  public List<OrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<Integer> id) {
     System.out.println(status);
     if (status.isPresent()){
       return orderService.getAllOrdersByPaymentStatus(status.get());
     }
+    if (id.isPresent()){
+      return orderService.getUsersOrders(id.get());
+    }
     return orderService.getAllOrders();
   }
-/*
-  GetMapping
-  public List<OrderListDto> findAll(@RequestParam("paid") Optional<boolean> status){
-    return orderService.getAllOrdersByPaymentStatus(status);
-  }
-  */
 
   @GetMapping("/{id}")
   public ResponseEntity<Optional<SingleOrder>> findOne(@PathVariable Integer id) {

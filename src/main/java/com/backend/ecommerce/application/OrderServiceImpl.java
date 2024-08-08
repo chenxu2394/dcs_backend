@@ -20,6 +20,10 @@ public class OrderServiceImpl implements OrderService {
   public List<OrderListDto> getAllOrders() {
     return jpaRepo.getAllOrders();
   }
+  @Override
+  public List<OrderListDto> getUsersOrders(int id){
+    return jpaRepo.getUsersOrders(id);
+  }
 
   @Override
   public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status){
