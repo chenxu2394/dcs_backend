@@ -5,4 +5,6 @@ public interface OrderListDto {
   int getUserId();
   String getUserName();
   String getOrderStatus();
+  boolean getPaymentStatus();
+  float getAmount();
 }

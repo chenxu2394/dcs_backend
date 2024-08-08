@@ -12,11 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
-  @Query(value= "SELECT o.id as Id, u.id as UserId, u.name as UserName, o.status as OrderStatus\n" +
+  @Query(value= "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
+          "o.status as OrderStatus, p.payment_status as paymentStatus, p.amount as Amount\n" +
           "FROM ecommerce.order AS o\n" +
-          "INNER JOIN ecommerce.user AS u ON u.id = o.user_id;",
-          nativeQuery = true) /* +
-          "INNER JOIN ecommerce.payment AS p ON p.order_id = o.id;")*/
+          "INNER JOIN ecommerce.user AS u ON u.id = o.user_id\n" +
+          "INNER JOIN ecommerce.payment AS p ON p.order_id = o.id;", nativeQuery = true)
   public List<OrderListDto> getAllOrders();
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, u.email as UserEmail, " +
