@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface OrderService {
   public List<OrderListDto> getAllOrders();
+  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status);
   public Optional<SingleOrder> findOrder(Integer id);
   public Order createNewOrder(Order order);
   public Optional<Order> updateOrder(Order order);

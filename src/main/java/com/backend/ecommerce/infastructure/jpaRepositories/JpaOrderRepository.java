@@ -30,4 +30,14 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "WHERE o.id = ?1;",
           nativeQuery = true)
   public Optional<SingleOrder>getSingleOrder(int id);
+
+
+  @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
+          "o.status as OrderStatus, p.payment_status as paymentStatus, p.amount as Amount\n" +
+          "FROM ecommerce.order AS o\n" +
+          "INNER JOIN ecommerce.user AS u ON u.id = o.user_id\n" +
+          "INNER JOIN ecommerce.payment AS p ON p.order_id = o.id\n" +
+          "WHERE p.payment_status = ?1;",
+  nativeQuery = true)
+  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status);
 }

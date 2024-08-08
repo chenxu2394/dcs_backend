@@ -22,6 +22,11 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status){
+    return jpaRepo.getAllOrdersByPaymentStatus(status);
+  }
+
+  @Override
   public Optional<SingleOrder> findOrder(Integer id) {
     return jpaRepo.getSingleOrder(id);
   }
