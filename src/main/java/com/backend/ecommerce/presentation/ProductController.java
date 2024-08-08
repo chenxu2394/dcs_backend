@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id){
+    public ResponseEntity<Product> getProductById(@PathVariable("id") UUID id){
         var product = productService.getProductById(id);
 
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

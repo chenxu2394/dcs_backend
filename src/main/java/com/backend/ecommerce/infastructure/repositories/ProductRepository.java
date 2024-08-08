@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class ProductRepository implements IProductRepository {
@@ -24,7 +25,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Optional<Product> getProductById(int id) {
+    public Optional<Product> getProductById(UUID id) {
         return jpaProductRepository.findById(id);
     }
 
@@ -49,7 +50,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public boolean deleteProduct(int id) {
+    public boolean deleteProduct(UUID id) {
         var originalProduct = jpaProductRepository.findById(id);
 
         if (originalProduct.isEmpty()) {

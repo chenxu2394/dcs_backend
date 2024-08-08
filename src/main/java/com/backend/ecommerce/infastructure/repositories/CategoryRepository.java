@@ -6,6 +6,7 @@ import com.backend.ecommerce.infastructure.jpaRepositories.JpaCategoryRepository
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class CategoryRepository implements ICategoryRepository {
@@ -16,7 +17,7 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public Optional<Category> findById(int id) {
+    public Optional<Category> findById(UUID id) {
         return jpaCategoryRepository.findById(id);
     }
 }

@@ -5,18 +5,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "user", schema = "ecommerce")
 @Setter
 @Getter
 public class User {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String email;
     private String password;
 //    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
 //    @Column(name = "type")  // Maps to the 'type' column in the SQL table
 //    private UserRole userRole;
-    private int type;
+    private short type;
 }

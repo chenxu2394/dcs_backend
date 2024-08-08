@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "category", schema = "ecommerce")
@@ -13,7 +14,8 @@ import java.util.Set;
 @Getter
 public class Category {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String description;
 }
