@@ -1,6 +1,7 @@
 package com.backend.ecommerce.presentation;
 
 
+import com.backend.ecommerce.application.UserService;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.http.ResponseEntity;
@@ -13,17 +14,17 @@ import java.util.List;
 public class UserController {
 
     private final JpaUserRepository jpaUserRepository;
+    private final UserService userService;
 
-    public UserController(JpaUserRepository jpaUserRepository) {
+    public UserController(JpaUserRepository jpaUserRepository, UserService userService) {
         this.jpaUserRepository = jpaUserRepository;
+        this.userService = userService;
     }
 
     @GetMapping()
     public ResponseEntity<List<User>> getUser(){
-        //Shortcut, using the DB directly
-        var result = jpaUserRepository.findAll().stream().toList();
-
-        return ResponseEntity.ok(result);
+        var users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @RequestMapping("/hello")

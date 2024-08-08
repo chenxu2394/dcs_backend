@@ -2,6 +2,7 @@ package com.backend.ecommerce.infastructure.repositories;
 
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.IUserRepository;
+import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,9 +10,15 @@ import java.util.List;
 @Repository
 public class UserRepository implements IUserRepository {
 
+    private final JpaUserRepository jpaUserRepository;
+
+    public UserRepository(JpaUserRepository jpaUserRepository) {
+        this.jpaUserRepository = jpaUserRepository;
+    }
+
     @Override
     public List<User> getAllUsers() {
-        return List.of();
+        return jpaUserRepository.findAll().stream().toList();
     }
 
 //    @Override

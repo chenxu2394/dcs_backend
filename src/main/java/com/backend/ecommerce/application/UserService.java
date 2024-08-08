@@ -10,7 +10,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private IUserRepository userRepository;
+    private final IUserRepository userRepository;
+
+    public UserService(IUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<User> getAllUsers() {
         return userRepository.getAllUsers();
