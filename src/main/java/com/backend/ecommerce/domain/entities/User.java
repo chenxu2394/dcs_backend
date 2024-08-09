@@ -18,8 +18,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-//    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
-//    @Column(name = "type")  // Maps to the 'type' column in the SQL table
-//    private UserRole userRole;
-    private short type;
+    @Column(name = "type", columnDefinition = "enum('ADMIN', 'USER')")
+    @Enumerated(EnumType.ORDINAL)
+    private UserRole userRole;
 }
