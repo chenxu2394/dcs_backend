@@ -21,7 +21,8 @@ public class Product {
     private double price;
     private int discount;
     private String description;
-
+    @ManyToOne
+    private Category category;
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 }

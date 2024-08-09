@@ -25,7 +25,6 @@ public class Order {
   private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 
   @OneToOne
-  @JoinColumn(name = "payment_id", referencedColumnName = "id")
   private Payment payment;
 
   @Column(name = "status")
@@ -37,6 +36,6 @@ public class Order {
   @Column(name = "street")
   private String street;
 
-  @Column(name = "postnumber")
+  @Column(name = "post_number")
   private String post_number;
 }
