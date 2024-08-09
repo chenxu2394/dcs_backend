@@ -24,9 +24,6 @@ public class Order {
   @OneToMany(mappedBy = "order")
   private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 
-  @OneToOne
-  private Payment payment;
-
   @Column(name = "status")
   private String status;
 
@@ -36,6 +33,6 @@ public class Order {
   @Column(name = "street")
   private String street;
 
-  @Column(name = "post_number")
+  @Column(name = "post_number", columnDefinition="bpchar(5)")
   private String post_number;
 }

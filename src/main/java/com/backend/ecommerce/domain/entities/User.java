@@ -1,6 +1,7 @@
 package com.backend.ecommerce.domain.entities;
 
 import com.backend.ecommerce.domain.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +30,10 @@ public class User {
 //    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
 //    @Column(name = "type")  // Maps to the 'type' column in the SQL table
 //    private UserRole userRole;
-    @Column(name="type")
-    private int type;
+    @Column(name="type", columnDefinition = "smallint")
+    private short type;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     List<Order> orders;
 }
