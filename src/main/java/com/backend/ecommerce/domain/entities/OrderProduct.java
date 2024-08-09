@@ -1,5 +1,6 @@
 package com.backend.ecommerce.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,9 @@ public class OrderProduct {
 
   @ManyToOne
   @JoinColumn(name="product_id")
+
   private Product product;
 
-  @Column(name="price")
+  @Column(name="price", columnDefinition = "numeric(18,2)")
   private double price;
 }
