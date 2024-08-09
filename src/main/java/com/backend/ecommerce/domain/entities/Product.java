@@ -3,8 +3,9 @@ package com.backend.ecommerce.domain.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -17,9 +18,10 @@ public class Product {
     private UUID id;
     private String name;
     private int quantity;
-    @Column(columnDefinition = "numeric(18,2)")
-    private float price;
+    private double price;
     private int discount;
     private String description;
-    private UUID category_Id;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 }
