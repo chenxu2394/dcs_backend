@@ -3,7 +3,7 @@ package com.backend.ecommerce.domain.entities.dtoInterfaces.order;
 import java.util.Date;
 import java.util.UUID;
 
-public interface SingleOrder {
+public interface SingleOrderDto {
   UUID getId();
   UUID getUserId();
   UUID getPaymentId();

@@ -1,21 +1,18 @@
 package com.backend.ecommerce.application;
 
-import ch.qos.logback.core.net.ObjectWriter;
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreateOrderDto;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreatePaymentDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.json.*;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -45,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Optional<SingleOrder> findOrder(String id) {
+  public Optional<SingleOrderDto> findOrder(String id) {
     return jpaRepo.getSingleOrder(UUID.fromString(id));
   }
 
@@ -89,6 +86,15 @@ public class OrderServiceImpl implements OrderService {
             Date.valueOf(obj.getString("orderDate"))
     );
 
+    CreatePaymentDto payment = new CreatePaymentDto(
+            UUID.fromString(uuid.toString()),
+            obj.getBoolean("paymentStatus"),
+            obj.getFloat("amount"),
+            obj.getString("paymentCity"),
+            obj.getString("paymentStreet"),
+            obj.getString("paymentPostNumber")
+    );
+
     JSONArray productList = obj.getJSONArray("products");
     String firstQuery = "INSERT INTO ecommerce.order (id, user_id, status, city, street, post_number, date)\n" +
                   "VALUES ('"+ uuid +"', '"+ order.userId +
@@ -104,11 +110,21 @@ public class OrderServiceImpl implements OrderService {
     String newquery = secondQuery + parameters;
     Object[] insertParameters = productList.toList().stream().map(this::toObjectArray).flatMap(Stream::of).toArray(Object[]::new);
 
+    String thirdQuery = "INSERT INTO ecommerce.payment (order_id, amount, city, street, post_number, payment_status) VALUES " +
+            "('"+payment.orderId +
+            "', '"+ payment.amount +
+            "', '" + payment.paymentCity +
+            "', '" + payment.paymentStreet +
+            "','" + payment.getPaymentPostNumber +
+            "'," + payment.paymentStatus +
+            ");";
+
     txTemplate.execute(new TransactionCallbackWithoutResult() {
       @Override
       protected void doInTransactionWithoutResult(TransactionStatus status) {
         jdbcTemplate.update(firstQuery);
         jdbcTemplate.update(newquery, insertParameters);
+        jdbcTemplate.update(thirdQuery);
       }
     });
 

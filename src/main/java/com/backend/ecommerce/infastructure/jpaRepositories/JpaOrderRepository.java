@@ -3,7 +3,7 @@ package com.backend.ecommerce.infastructure.jpaRepositories;
 import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreateOrderDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Repository
 public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
-  @Query(value= "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
+  @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
           "o.status as OrderStatus, p.payment_status as paymentStatus, p.amount as Amount\n" +
           "FROM ecommerce.order AS o\n" +
           "INNER JOIN ecommerce.user AS u ON u.id = o.user_id\n" +
@@ -25,7 +25,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
   public List<OrderListDto> getAllOrders();
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, u.email as UserEmail, " +
-          "p.id as PaymentId, o.status as OrderStatus, "+
+          "p.id as PaymentId, o.status as OrderStatus, " +
           "o.city as ShipmentCity, o.street as ShipmentStreet, o.post_number as ShipmentPostNumber, " +
           "o.date as OrderDate, p.amount as Amount, p.payment_status as PaymentStatus, " +
           "p.city as BillingCity,p.street as BillingStreet, p.post_number as BillingPostNumber " +
@@ -34,7 +34,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "INNER JOIN ecommerce.payment AS p ON o.id = p.order_id " +
           "WHERE o.id = ?1;",
           nativeQuery = true)
-  public Optional<SingleOrder>getSingleOrder(UUID id);
+  public Optional<SingleOrderDto> getSingleOrder(UUID id);
 
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
@@ -43,7 +43,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "INNER JOIN ecommerce.user AS u ON u.id = o.user_id\n" +
           "INNER JOIN ecommerce.payment AS p ON p.order_id = o.id\n" +
           "WHERE p.payment_status = ?1;",
-  nativeQuery = true)
+          nativeQuery = true)
   public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status);
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
@@ -54,19 +54,4 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "WHERE u.id = ?1;",
           nativeQuery = true)
   public List<OrderListDto> getUsersOrders(UUID id);
-
-  @Transactional
-  @Modifying
-  @Query(value =
-          "DO $$\n" +
-          "DECLARE orderId UUID;\n" +
-          "BEGIN\n" +
-          "INSERT INTO ecommerce.order (user_id, status, city, street, post_number, date)\n" +
-          "VALUES (:#{#order.userId}, :#{#order.orderStatus}, :#{#order.shipmentCity}, :#{#order.shipmentStreet}, :#{#order.shipmentPostNumber}, :#{#order.orderDate})\n" +
-          "RETURNING id INTO orderId;\n" +
-          "INSERT INTO ecommerce.order_product (product_id, order_id, price)\n" +
-          "VALUES :products \n" +
-          "END $$;"
-          , nativeQuery = true)
-  public Optional<Object> getTest(@Param("order") CreateOrderDto order, String products);
 }
