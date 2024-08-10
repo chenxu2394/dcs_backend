@@ -2,8 +2,10 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.Order;
+import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
+import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +38,11 @@ public class OrderController {
       return ResponseEntity.notFound().build();
     }
     return ResponseEntity.ok(order);
+  }
+
+  @PostMapping("/users")
+  public Optional<Object> findAllUsers(@RequestBody String teksti){
+
+    return orderService.getUsers(teksti);
   }
 }

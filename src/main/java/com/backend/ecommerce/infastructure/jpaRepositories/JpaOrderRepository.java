@@ -1,10 +1,14 @@
 package com.backend.ecommerce.infastructure.jpaRepositories;
 
 import com.backend.ecommerce.domain.entities.Order;
+import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreateOrderDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -50,4 +54,19 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           "WHERE u.id = ?1;",
           nativeQuery = true)
   public List<OrderListDto> getUsersOrders(UUID id);
+
+  @Transactional
+  @Modifying
+  @Query(value =
+          "DO $$\n" +
+          "DECLARE orderId UUID;\n" +
+          "BEGIN\n" +
+          "INSERT INTO ecommerce.order (user_id, status, city, street, post_number, date)\n" +
+          "VALUES (:#{#order.userId}, :#{#order.orderStatus}, :#{#order.shipmentCity}, :#{#order.shipmentStreet}, :#{#order.shipmentPostNumber}, :#{#order.orderDate})\n" +
+          "RETURNING id INTO orderId;\n" +
+          "INSERT INTO ecommerce.order_product (product_id, order_id, price)\n" +
+          "VALUES :products \n" +
+          "END $$;"
+          , nativeQuery = true)
+  public Optional<Object> getTest(@Param("order") CreateOrderDto order, String products);
 }

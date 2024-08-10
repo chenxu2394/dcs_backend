@@ -1,6 +1,7 @@
 package com.backend.ecommerce.abstraction;
 
 import com.backend.ecommerce.domain.entities.Order;
+import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
 
@@ -17,4 +18,5 @@ public interface OrderService {
   public Optional<Order> updateOrder(Order order);
   public boolean deleteOrder(Integer id);
 
+  Optional<Object> getUsers(String teksti);
 }
