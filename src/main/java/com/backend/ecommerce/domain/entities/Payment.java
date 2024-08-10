@@ -20,11 +20,13 @@ public class Payment {
   @JoinColumn(name = "order_id", referencedColumnName = "id")
   private Order order;
 
-  @Column(name="amount")
+  @Column(name="amount", columnDefinition = "numeric(24,2)")
   private float amount;
 
   private String city;
   private String street;
+
+  @Column(name = "post_number", columnDefinition="bpchar(5)")
   private String postNumber;
   private boolean paymentStatus;
 

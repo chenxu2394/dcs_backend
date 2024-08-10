@@ -1,5 +1,6 @@
 package com.backend.ecommerce.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +19,13 @@ public class Product {
     private UUID id;
     private String name;
     private int quantity;
+    @Column(name = "price", columnDefinition = "numeric(18,2)")
     private double price;
     private int discount;
     private String description;
-
+    @ManyToOne
+    private Category category;
+    @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 }
