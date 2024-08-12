@@ -3,6 +3,7 @@ package com.backend.ecommerce.abstraction;
 import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +18,5 @@ public interface OrderService {
   public Optional<Order> updateOrder(Order order);
   public boolean deleteOrder(Integer id);
 
-  Optional<Object> getUsers(String teksti);
+  Optional<JSONObject> createNewOrder(String teksti);
 }

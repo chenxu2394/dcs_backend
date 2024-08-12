@@ -3,6 +3,7 @@ package com.backend.ecommerce.presentation;
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +38,12 @@ public class OrderController {
     return ResponseEntity.ok(order);
   }
 
-  @PostMapping("/users")
-  public Optional<Object> findAllUsers(@RequestBody String teksti){
-
-    return orderService.getUsers(teksti);
+  @PostMapping("/")
+  public ResponseEntity<Optional<JSONObject>> createNewOrder(@RequestBody String userInput){
+    Optional<JSONObject> newOrder = orderService.getUsers(userInput);
+    if (newOrder.isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
+    return ResponseEntity.ok(newOrder);
   }
 }

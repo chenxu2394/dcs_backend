@@ -24,6 +24,10 @@ import java.util.stream.Stream;
 public class OrderServiceImpl implements OrderService {
   @Autowired
   private JpaOrderRepository jpaRepo;
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+  @Autowired
+  private TransactionTemplate txTemplate;
 
   @Override
   public List<OrderListDto> getAllOrders() {
@@ -67,15 +71,11 @@ public class OrderServiceImpl implements OrderService {
     }
     return false;
   }
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
-  @Autowired
-  private TransactionTemplate txTemplate;
 
   @Transactional
-  public Optional<Object> getUsers(String teksti){
+  public Optional<JSONObject> createNewOrder(String userInput){
     final Object uuid = UUID.randomUUID();
-    JSONObject obj = new JSONObject(teksti);
+    JSONObject obj = new JSONObject(userInput);
 
     CreateOrderDto order = new CreateOrderDto(
             UUID.fromString(obj.getString("userId")),
@@ -116,8 +116,7 @@ public class OrderServiceImpl implements OrderService {
             "', '" + payment.paymentCity +
             "', '" + payment.paymentStreet +
             "','" + payment.getPaymentPostNumber +
-            "'," + payment.paymentStatus +
-            ");";
+            "'," + payment.paymentStatus + ");";
 
     txTemplate.execute(new TransactionCallbackWithoutResult() {
       @Override
