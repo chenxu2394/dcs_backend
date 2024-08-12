@@ -1,8 +1,8 @@
-package com.backend.ecommerce.domain.entities.dtoInterfaces.order;
+package com.backend.ecommerce.application.dto.dtoInterfaces;
 
 import java.util.UUID;
 
-public interface OrderListDto {
+public interface IOrderListDto {
   UUID getId();
   UUID getUserId();
   String getUserName();

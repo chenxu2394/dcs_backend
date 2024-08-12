@@ -1,11 +1,15 @@
 package com.backend.ecommerce.application;
 
 import com.backend.ecommerce.abstraction.OrderService;
-import com.backend.ecommerce.domain.entities.Order;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreateOrderDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreatePaymentDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.ISingleOrderDto;
+import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
+import com.backend.ecommerce.application.dto.product.ShortProductListDto;
+import com.backend.ecommerce.application.mapper.OrderMapper;
+import com.backend.ecommerce.application.dto.order.CreateOrderDto;
+import com.backend.ecommerce.application.dto.order.CreatePaymentDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderListDto;
 import com.backend.ecommerce.application.dto.order.SingleOrderDto;
+import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -30,44 +34,51 @@ public class OrderServiceImpl implements OrderService {
   @Autowired
   private TransactionTemplate txTemplate;
   ObjectMapper objectMapper = new ObjectMapper();
+  @Autowired
+  OrderMapper orderMapper;
 
   @Override
-  public List<OrderListDto> getAllOrders() {
+  public List<IOrderListDto> getAllOrders() {
     return jpaRepo.getAllOrders();
   }
 
   @Override
-  public List<OrderListDto> getUsersOrders(String id){
+  public List<IOrderListDto> getUsersOrders(String id){
     return jpaRepo.getUsersOrders(UUID.fromString(id));
   }
 
   @Override
-  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status){
+  public List<IOrderListDto> getAllOrdersByPaymentStatus(boolean status){
     return jpaRepo.getAllOrdersByPaymentStatus(status);
   }
 
   @Override
-  public Optional<SingleOrderDto> findOrder(String id) {
-    return jpaRepo.getSingleOrder(UUID.fromString(id));
+  public Optional<SingleOrderDto> findOrder(UUID id) {
+    Optional<ISingleOrderDto> order = jpaRepo.getSingleOrder(id);
+    return order.map(iSingleOrderDto -> orderMapper.toSingleOrderDto(iSingleOrderDto));
   }
 
   @Override
-  public Order createNewOrder(Order order) {
-    return jpaRepo.save(order);
+  public Optional<Order> updateOrder(UUID id, OrderUpdateDto orderUpdate) {
+    Optional<ISingleOrderDto> foundOrder = jpaRepo.getSingleOrder(id);
+    if (foundOrder.isEmpty()) return Optional.empty();
+
+    Order order = new Order();
+    Order mappedOrder = orderMapper.toOrderFromUpdate(orderUpdate);
+    order.setId(id);
+    order.setCity(mappedOrder.getCity());
+    order.setStreet(mappedOrder.getStreet());
+    order.setPost_number(mappedOrder.getPost_number());
+    order.setStatus(mappedOrder.getStatus());
+
+    jpaRepo.updateOrder(order);
+    return Optional.of(order);
   }
 
   @Override
-  public Optional<Order> updateOrder(Order order) {
-    //Optional<Order> foundOrder = jpaRepo.findById(order.getId());
-    //if (foundOrder.isEmpty()) return Optional.empty();
-    //jpaRepo.save(order);
-    return Optional.empty();
-  }
-
-  @Override
-  public boolean deleteOrder(Integer id) {
-    if (jpaRepo.findById(id).isPresent()) {
-      jpaRepo.deleteById(id);
+  public boolean deleteOrder(UUID id) {
+    if (jpaRepo.getSingleOrder(id).isPresent()) {
+      jpaRepo.deleteOrder(id);
       return true;
     }
     return false;
@@ -79,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
       final Object uuid = UUID.randomUUID();
       JSONObject obj = new JSONObject(userInput);
 
+      //New Order object
       CreateOrderDto order = new CreateOrderDto(
               UUID.fromString(obj.getString("userId")),
               obj.getString("shipmentCity"),
@@ -88,15 +100,17 @@ public class OrderServiceImpl implements OrderService {
               Date.valueOf(obj.getString("orderDate"))
       );
 
+      // New payment object
       CreatePaymentDto payment = new CreatePaymentDto(
               UUID.fromString(uuid.toString()),
               obj.getBoolean("paymentStatus"),
               obj.getFloat("amount"),
-              obj.getString("paymentCity"),
-              obj.getString("paymentStreet"),
-              obj.getString("paymentPostNumber")
+              obj.getString("billingCity"),
+              obj.getString("billingStreet"),
+              obj.getString("billingPostNumber")
       );
 
+      //SQL queries
       JSONArray productList = obj.getJSONArray("products");
       String firstQuery = "INSERT INTO ecommerce.order (id, user_id, status, city, street, post_number, date)\n" +
               "VALUES ('"+ uuid +"', '"+ order.userId +
@@ -115,11 +129,12 @@ public class OrderServiceImpl implements OrderService {
       String thirdQuery = "INSERT INTO ecommerce.payment (order_id, amount, city, street, post_number, payment_status) VALUES " +
               "('"+payment.orderId +
               "', '"+ payment.amount +
-              "', '" + payment.paymentCity +
-              "', '" + payment.paymentStreet +
-              "','" + payment.getPaymentPostNumber +
+              "', '" + payment.billingCity +
+              "', '" + payment.billingStreet +
+              "','" + payment.billingPostNumber +
               "'," + payment.paymentStatus + ");";
 
+      // Exxecuting transaction
       txTemplate.execute(new TransactionCallbackWithoutResult() {
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {

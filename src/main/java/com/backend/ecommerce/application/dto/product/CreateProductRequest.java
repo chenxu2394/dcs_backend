@@ -1,4 +1,4 @@
-package com.backend.ecommerce.application.dto;
+package com.backend.ecommerce.application.dto.product;
 
 import java.util.UUID;
 

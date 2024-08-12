@@ -1,12 +1,11 @@
 package com.backend.ecommerce.application;
 
-import com.backend.ecommerce.application.dto.CreateProductRequest;
+import com.backend.ecommerce.application.dto.product.CreateProductRequest;
 import com.backend.ecommerce.domain.entities.Product;
 import com.backend.ecommerce.domain.interfaces.ICategoryRepository;
 import com.backend.ecommerce.domain.interfaces.IProductRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

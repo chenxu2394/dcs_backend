@@ -1,7 +1,7 @@
 package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.application.ProductService;
-import com.backend.ecommerce.application.dto.CreateProductRequest;
+import com.backend.ecommerce.application.dto.product.CreateProductRequest;
 import com.backend.ecommerce.domain.entities.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

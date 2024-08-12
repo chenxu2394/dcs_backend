@@ -1,7 +1,10 @@
 package com.backend.ecommerce.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +21,12 @@ public class Order {
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
+
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
+  @JsonIgnore
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @OneToMany(mappedBy = "order")
   private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
 

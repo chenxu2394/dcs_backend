@@ -1,21 +1,20 @@
 package com.backend.ecommerce.abstraction;
 
-import com.backend.ecommerce.domain.entities.Order;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
+import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderListDto;
 import com.backend.ecommerce.application.dto.order.SingleOrderDto;
+import com.backend.ecommerce.domain.entities.Order;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface OrderService {
-  public List<OrderListDto> getAllOrders();
-  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status);
-  public List<OrderListDto> getUsersOrders(String id);
-  public Optional<SingleOrderDto> findOrder(String id);
-
-  public Order createNewOrder(Order order);
-  public Optional<Order> updateOrder(Order order);
-  public boolean deleteOrder(Integer id);
-
-  Optional<SingleOrderDto> createNewOrder(String teksti);
+  public List<IOrderListDto> getAllOrders();
+  public List<IOrderListDto> getAllOrdersByPaymentStatus(boolean status);
+  public List<IOrderListDto> getUsersOrders(String id);
+  public Optional<SingleOrderDto> findOrder(UUID id);
+  public Optional<SingleOrderDto> createNewOrder(String userInput);
+  public boolean deleteOrder(UUID id);
+  public Optional<Order> updateOrder(UUID id, OrderUpdateDto orderUpdate);
 }

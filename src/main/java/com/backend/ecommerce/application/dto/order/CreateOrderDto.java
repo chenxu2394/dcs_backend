@@ -1,4 +1,4 @@
-package com.backend.ecommerce.domain.entities.dtoInterfaces.order;
+package com.backend.ecommerce.application.dto.order;
 
 import java.util.Date;
 import java.util.UUID;
