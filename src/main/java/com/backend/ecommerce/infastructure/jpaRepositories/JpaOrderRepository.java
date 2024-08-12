@@ -1,14 +1,10 @@
 package com.backend.ecommerce.infastructure.jpaRepositories;
 
 import com.backend.ecommerce.domain.entities.Order;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.CreateOrderDto;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
-import jakarta.transaction.Transactional;
+import com.backend.ecommerce.application.dto.order.SingleOrderDto;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -2,8 +2,8 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrderDto;
-import org.json.JSONObject;
+import com.backend.ecommerce.application.dto.order.SingleOrderDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class OrderController {
   @Autowired
   private OrderService orderService;
+  ObjectMapper objectMapper = new ObjectMapper();
 
   @GetMapping
   public List<OrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<String> id) {
@@ -38,12 +39,13 @@ public class OrderController {
     return ResponseEntity.ok(order);
   }
 
-  @PostMapping("/")
-  public ResponseEntity<Optional<JSONObject>> createNewOrder(@RequestBody String userInput){
-    Optional<JSONObject> newOrder = orderService.getUsers(userInput);
+  @PostMapping
+  public ResponseEntity<Optional<SingleOrderDto>> createNewOrder(@RequestBody String userInput){
+    Optional<SingleOrderDto> newOrder = orderService.createNewOrder(userInput);
     if (newOrder.isEmpty()) {
       return ResponseEntity.badRequest().build();
     }
+
     return ResponseEntity.ok(newOrder);
   }
 }
