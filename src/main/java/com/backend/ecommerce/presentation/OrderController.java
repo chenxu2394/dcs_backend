@@ -52,13 +52,14 @@ public class OrderController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<Optional<Order>> updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDto orderUpdate) {
-    Optional<Order> updatedOrder = orderService.updateOrder(id, orderUpdate);
+  public ResponseEntity<Optional<SingleOrderDto>> updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDto orderUpdate) {
+    Optional<SingleOrderDto> updatedOrder = orderService.updateOrder(id, orderUpdate);
     if (updatedOrder.isEmpty()) {
       return ResponseEntity.badRequest().build();
     }
     return ResponseEntity.ok(updatedOrder);
   }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteOrder(@PathVariable UUID id) {
     boolean answer = orderService.deleteOrder(id);

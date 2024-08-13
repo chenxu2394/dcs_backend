@@ -3,7 +3,6 @@ package com.backend.ecommerce.abstraction;
 import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
 import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderListDto;
 import com.backend.ecommerce.application.dto.order.SingleOrderDto;
-import com.backend.ecommerce.domain.entities.Order;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +15,5 @@ public interface OrderService {
   public Optional<SingleOrderDto> findOrder(UUID id);
   public Optional<SingleOrderDto> createNewOrder(String userInput);
   public boolean deleteOrder(UUID id);
-  public Optional<Order> updateOrder(UUID id, OrderUpdateDto orderUpdate);
+  public Optional<SingleOrderDto> updateOrder(UUID id, OrderUpdateDto orderUpdate);
 }

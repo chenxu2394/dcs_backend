@@ -3,7 +3,6 @@ package com.backend.ecommerce.application;
 import com.backend.ecommerce.abstraction.OrderService;
 import com.backend.ecommerce.application.dto.dtoInterfaces.ISingleOrderDto;
 import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
-import com.backend.ecommerce.application.dto.product.ShortProductListDto;
 import com.backend.ecommerce.application.mapper.OrderMapper;
 import com.backend.ecommerce.application.dto.order.CreateOrderDto;
 import com.backend.ecommerce.application.dto.order.CreatePaymentDto;
@@ -59,26 +58,25 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Optional<Order> updateOrder(UUID id, OrderUpdateDto orderUpdate) {
-    Optional<ISingleOrderDto> foundOrder = jpaRepo.getSingleOrder(id);
+  public Optional<SingleOrderDto> updateOrder(UUID id, OrderUpdateDto orderUpdate) {
+    Optional<Order> foundOrder = jpaRepo.findById(id);
     if (foundOrder.isEmpty()) return Optional.empty();
-
-    Order order = new Order();
+    Order order = foundOrder.get();
     Order mappedOrder = orderMapper.toOrderFromUpdate(orderUpdate);
     order.setId(id);
     order.setCity(mappedOrder.getCity());
     order.setStreet(mappedOrder.getStreet());
     order.setPost_number(mappedOrder.getPost_number());
     order.setStatus(mappedOrder.getStatus());
-
     jpaRepo.updateOrder(order);
-    return Optional.of(order);
+    Optional<ISingleOrderDto> newOrder = jpaRepo.getSingleOrder(id);
+    return newOrder.map(iSingleOrderDto -> orderMapper.toSingleOrderDto(iSingleOrderDto));
   }
 
   @Override
   public boolean deleteOrder(UUID id) {
-    if (jpaRepo.getSingleOrder(id).isPresent()) {
-      jpaRepo.deleteOrder(id);
+    if (jpaRepo.findById(id).isPresent()) {
+      jpaRepo.deleteById(id);
       return true;
     }
     return false;

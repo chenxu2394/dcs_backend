@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
+public interface JpaOrderRepository extends JpaRepository<Order, UUID> {
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
           "o.status as OrderStatus, p.payment_status as paymentStatus, p.amount as Amount\n" +
           "FROM ecommerce.order AS o\n" +
@@ -62,9 +62,4 @@ public interface JpaOrderRepository extends JpaRepository<Order, Integer> {
           nativeQuery = true)
   public void updateOrder(@Param("order") Order order);
 
-  @Transactional
-  @Modifying
-  @Query(value= "DELETE FROM ecommerce.order WHERE id = ?1",
-          nativeQuery = true)
-  public void deleteOrder(UUID id);
 }

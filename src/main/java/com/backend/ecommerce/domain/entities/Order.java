@@ -1,6 +1,7 @@
 package com.backend.ecommerce.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -20,8 +21,7 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-
+  @ManyToOne()
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
