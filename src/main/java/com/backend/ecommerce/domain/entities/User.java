@@ -27,11 +27,10 @@ public class User {
 
     @Column(name="password")
     private String password;
-//    @Enumerated(EnumType.ORDINAL)  // Maps enum to a smallint
-//    @Column(name = "type")  // Maps to the 'type' column in the SQL table
-//    private UserRole userRole;
-    @Column(name="type", columnDefinition = "smallint")
-    private short type;
+
+    @Column(name = "type", columnDefinition = "enum('ADMIN', 'USER')")
+    @Enumerated(EnumType.ORDINAL)
+    private UserRole userRole;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
