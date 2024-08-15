@@ -1,8 +1,9 @@
 package com.backend.ecommerce.presentation;
 
 
-import com.backend.ecommerce.application.UserService;
+import com.backend.ecommerce.abstraction.UserService;
 import com.backend.ecommerce.domain.entities.User;
+import com.backend.ecommerce.domain.interfaces.IUserRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,11 @@ import java.util.UUID;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping()
     public ResponseEntity<List<User>> getAllUsers(){
@@ -25,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") UUID id){
         var user = userService.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
