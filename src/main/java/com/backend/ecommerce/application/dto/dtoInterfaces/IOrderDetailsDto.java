@@ -1,12 +1,9 @@
 package com.backend.ecommerce.application.dto.dtoInterfaces;
 
-import com.backend.ecommerce.application.dto.product.ShortProductListDto;
-
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-public interface ISingleOrderDto {
+public interface IOrderDetailsDto {
   UUID getId();
   UUID getUserId();
   UUID getPaymentId();

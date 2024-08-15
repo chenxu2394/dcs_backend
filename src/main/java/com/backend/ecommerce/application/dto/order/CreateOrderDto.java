@@ -1,23 +1,20 @@
 package com.backend.ecommerce.application.dto.order;
 
+import com.backend.ecommerce.application.dto.CreateOrderProductDto;
+import com.backend.ecommerce.application.dto.payment.CreatePayment;
+
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 
-public class CreateOrderDto {
-  public UUID userId;
-  public String shipmentCity;
-  public String shipmentStreet;
-  public String shipmentPostNumber;
-  public String orderStatus;
-  public Date orderDate;
-
-  public CreateOrderDto(UUID userId, String shipmentCity, String shipmentStreet, String shipmentPostNumber, String orderStatus, Date orderDate) {
-    this.userId = userId;
-    this.shipmentCity = shipmentCity;
-    this.shipmentStreet = shipmentStreet;
-    this.shipmentPostNumber = shipmentPostNumber;
-    this.orderStatus = orderStatus;
-    this.orderDate = orderDate;
-  }
-}
+public record CreateOrderDto (
+  UUID user_id,
+  String city,
+  String street,
+  String postNumber,
+  String status,
+  Date date,
+  List<CreateOrderProductDto> products,
+  CreatePayment payment
+){}

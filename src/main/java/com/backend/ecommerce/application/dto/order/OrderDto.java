@@ -2,7 +2,7 @@ package com.backend.ecommerce.application.dto.order;
 
 import java.util.UUID;
 
-public record OrderListDto (
+public record OrderDto(
         UUID id,
         UUID userId,
         String userName,

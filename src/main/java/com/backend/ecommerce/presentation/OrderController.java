@@ -1,10 +1,10 @@
 package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.OrderService;
-import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderListDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderDto;
+import com.backend.ecommerce.application.dto.order.CreateOrderDto;
+import com.backend.ecommerce.application.dto.order.OrderDetailsDto;
 import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
-import com.backend.ecommerce.application.dto.order.SingleOrderDto;
-import com.backend.ecommerce.domain.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,20 +22,20 @@ public class OrderController {
 
 
   @GetMapping
-  public List<IOrderListDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<String> id) {
+  public List<IOrderDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<UUID> id) {
     System.out.println(status);
     if (status.isPresent()){
       return orderService.getAllOrdersByPaymentStatus(status.get());
     }
     if (id.isPresent()){
-      return orderService.getUsersOrders(id.get());
+      return orderService.getOrdersByUserId(id.get());
     }
     return orderService.getAllOrders();
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Optional<SingleOrderDto>> findOne(@PathVariable UUID id) {
-    Optional<SingleOrderDto> order = orderService.findOrder(id);
+  public ResponseEntity<Optional<OrderDetailsDto>> findOne(@PathVariable UUID id) {
+    Optional<OrderDetailsDto> order = orderService.findOrder(id);
     if (order.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
@@ -43,8 +43,8 @@ public class OrderController {
   }
 
   @PostMapping
-  public ResponseEntity<Optional<SingleOrderDto>> createNewOrder(@RequestBody String userInput){
-    Optional<SingleOrderDto> newOrder = orderService.createNewOrder(userInput);
+  public ResponseEntity<Optional<OrderDetailsDto>> createNewOrder(@RequestBody CreateOrderDto createOrderDto){
+    Optional<OrderDetailsDto> newOrder = orderService.createNewOrder(createOrderDto);
     if (newOrder.isEmpty()) {
       return ResponseEntity.badRequest().build();
     }
@@ -52,8 +52,8 @@ public class OrderController {
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<Optional<SingleOrderDto>> updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDto orderUpdate) {
-    Optional<SingleOrderDto> updatedOrder = orderService.updateOrder(id, orderUpdate);
+  public ResponseEntity<Optional<OrderDetailsDto>> updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDto orderUpdate) {
+    Optional<OrderDetailsDto> updatedOrder = orderService.updateOrder(id, orderUpdate);
     if (updatedOrder.isEmpty()) {
       return ResponseEntity.badRequest().build();
     }

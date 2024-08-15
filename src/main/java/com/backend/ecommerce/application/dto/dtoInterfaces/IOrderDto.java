@@ -2,7 +2,7 @@ package com.backend.ecommerce.application.dto.dtoInterfaces;
 
 import java.util.UUID;
 
-public interface IOrderListDto {
+public interface IOrderDto {
   UUID getId();
   UUID getUserId();
   String getUserName();
