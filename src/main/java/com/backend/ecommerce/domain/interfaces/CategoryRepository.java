@@ -7,6 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ICategoryRepository {
+public interface CategoryRepository {
     public Optional<Category> findById(UUID id);
 }
