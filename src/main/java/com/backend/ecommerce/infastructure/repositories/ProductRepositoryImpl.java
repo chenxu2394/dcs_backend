@@ -1,9 +1,8 @@
 package com.backend.ecommerce.infastructure.repositories;
 
 import com.backend.ecommerce.domain.entities.Product;
-import com.backend.ecommerce.domain.interfaces.IProductRepository;
+import com.backend.ecommerce.domain.interfaces.ProductRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaProductRepository;
-import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,11 +10,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class ProductRepository implements IProductRepository {
+public class ProductRepositoryImpl implements ProductRepository {
 
     private final JpaProductRepository jpaProductRepository;
 
-    public ProductRepository(JpaProductRepository jpaProductRepository) {
+    public ProductRepositoryImpl(JpaProductRepository jpaProductRepository) {
         this.jpaProductRepository = jpaProductRepository;
     }
 
@@ -37,27 +36,20 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Optional<Product> updateProduct(Product product) {
-        var originalProduct = jpaProductRepository.findById(product.getId());
-
-        if (originalProduct.isEmpty()) {
-            return Optional.empty();
-        }
-
+    public Product updateProduct(Product product) {
         jpaProductRepository.save(product);
 
-        return Optional.of(product);
+        return product;
     }
 
     @Override
-    public boolean deleteProduct(UUID id) {
+    public void deleteProduct(UUID id) {
         var originalProduct = jpaProductRepository.findById(id);
 
         if (originalProduct.isEmpty()) {
-            return false;
+            return;
         }
         jpaProductRepository.deleteById(id);
-        return true;
     }
 
 }
