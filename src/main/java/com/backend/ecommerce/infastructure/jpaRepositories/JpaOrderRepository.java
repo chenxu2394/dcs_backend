@@ -57,7 +57,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, UUID> {
   @Transactional
   @Modifying
   @Query(value= "UPDATE ecommerce.order " +
-          "SET status = :#{#order.status}, city = :#{#order.city}, street = :#{#order.street}, post_number = :#{#order.post_number} " +
+          "SET status = :#{#order.status}, city = :#{#order.city}, street = :#{#order.street}, post_number = :#{#order.postNumber} " +
           "WHERE id = :#{#order.id};",
           nativeQuery = true)
   public void updateOrder(@Param("order") Order order);

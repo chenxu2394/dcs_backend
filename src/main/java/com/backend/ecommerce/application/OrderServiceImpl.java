@@ -13,11 +13,8 @@ import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.domain.entities.OrderProduct;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderProductRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
-import com.backend.ecommerce.infastructure.jpaRepositories.JpaPaymentRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 
 import java.util.*;
@@ -27,13 +24,8 @@ public class OrderServiceImpl implements OrderService {
   @Autowired
   JpaOrderRepository jpaOrderRepository;
   @Autowired
-  JpaPaymentRepository jpaPaymentRepository;
-  @Autowired
   JpaOrderProductRepository jpaOrderProductRepository;
-  @Autowired
-  TransactionTemplate transactionTemplate;
-  @Autowired
-  JdbcTemplate jdbcTemplate;
+
 
   @Autowired
   OrderMapper orderMapper;
@@ -64,14 +56,17 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public Optional<OrderDetailsDto> updateOrder(UUID id, OrderUpdateDto orderUpdate) {
     Optional<Order> foundOrder = jpaOrderRepository.findById(id);
+
     if (foundOrder.isEmpty()) return Optional.empty();
+
     Order order = foundOrder.get();
-    Order mappedOrder = orderMapper.toOrderFromUpdate(orderUpdate);
+
     order.setId(id);
-    order.setCity(mappedOrder.getCity());
-    order.setStreet(mappedOrder.getStreet());
-    order.setPostNumber(mappedOrder.getPostNumber());
-    order.setStatus(mappedOrder.getStatus());
+    order.setCity(orderUpdate.city());
+    order.setStreet(orderUpdate.street());
+    order.setPostNumber(orderUpdate.postNumber());
+    order.setStatus(orderUpdate.status());
+
     jpaOrderRepository.updateOrder(order);
     Optional<IOrderDetailsDto> newOrder = jpaOrderRepository.getSingleOrder(id);
     return newOrder.map(iOrderDetailsDto -> orderMapper.toOrderDetailsDtoFromInterface(iOrderDetailsDto));
