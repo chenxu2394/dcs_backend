@@ -1,8 +1,12 @@
 package com.backend.ecommerce.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,12 +21,14 @@ public class Order {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne()
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  @OneToMany(mappedBy = "order")
-  private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
+  @JsonIgnore
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+  private List<OrderProduct> orderProducts = new ArrayList<>();
 
   @Column(name = "status")
   private String status;
@@ -34,5 +40,13 @@ public class Order {
   private String street;
 
   @Column(name = "post_number", columnDefinition="bpchar(5)")
-  private String post_number;
+  private String postNumber;
+
+  @Column(name = "date", columnDefinition = "date")
+  private LocalDateTime date;
+
+  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JoinColumn(name = "payment_id", referencedColumnName = "id")
+  private Payment payment;
 }

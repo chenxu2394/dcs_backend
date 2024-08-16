@@ -1,60 +1,102 @@
 package com.backend.ecommerce.application;
 
 import com.backend.ecommerce.abstraction.OrderService;
+import com.backend.ecommerce.application.dto.CreateOrderProductDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderDetailsDto;
+import com.backend.ecommerce.application.dto.order.OrderDetailsDto;
+import com.backend.ecommerce.application.dto.order.OrderUpdateDto;
+import com.backend.ecommerce.application.mapper.OrderMapper;
+import com.backend.ecommerce.application.dto.order.CreateOrderDto;
+import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderDto;
+import com.backend.ecommerce.application.mapper.OrderProductMapper;
 import com.backend.ecommerce.domain.entities.Order;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.OrderListDto;
-import com.backend.ecommerce.domain.entities.dtoInterfaces.order.SingleOrder;
+import com.backend.ecommerce.domain.entities.OrderProduct;
+import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderProductRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
   @Autowired
-  private JpaOrderRepository jpaRepo;
+  JpaOrderRepository jpaOrderRepository;
+  @Autowired
+  JpaOrderProductRepository jpaOrderProductRepository;
+
+
+  @Autowired
+  OrderMapper orderMapper;
+  @Autowired
+  OrderProductMapper orderProductMapper;
 
   @Override
-  public List<OrderListDto> getAllOrders() {
-    return jpaRepo.getAllOrders();
-  }
-  @Override
-  public List<OrderListDto> getUsersOrders(String id){
-    return jpaRepo.getUsersOrders(UUID.fromString(id));
-  }
-
-  @Override
-  public List<OrderListDto> getAllOrdersByPaymentStatus(boolean status){
-    return jpaRepo.getAllOrdersByPaymentStatus(status);
-  }
-
-  @Override
-  public Optional<SingleOrder> findOrder(String id) {
-    return jpaRepo.getSingleOrder(UUID.fromString(id));
+  public List<IOrderDto> getAllOrders() {
+    return jpaOrderRepository.getAllOrders();
   }
 
   @Override
-  public Order createNewOrder(Order order) {
-    return jpaRepo.save(order);
+  public List<IOrderDto> getOrdersByUserId(UUID id){
+    return jpaOrderRepository.getUsersOrders(id);
   }
 
   @Override
-  public Optional<Order> updateOrder(Order order) {
-    //Optional<Order> foundOrder = jpaRepo.findById(order.getId());
-    //if (foundOrder.isEmpty()) return Optional.empty();
-    //jpaRepo.save(order);
-    return Optional.empty();
+  public List<IOrderDto> getAllOrdersByPaymentStatus(boolean status){
+    return jpaOrderRepository.getAllOrdersByPaymentStatus(status);
   }
 
   @Override
-  public boolean deleteOrder(Integer id) {
-    if (jpaRepo.findById(id).isPresent()) {
-      jpaRepo.deleteById(id);
+  public Optional<OrderDetailsDto> findOrder(UUID id) {
+    Optional<IOrderDetailsDto> order = jpaOrderRepository.getSingleOrder(id);
+    return order.map(iOrderDetailsDto -> orderMapper.toOrderDetailsDtoFromInterface(iOrderDetailsDto));
+  }
+
+  @Override
+  public Optional<OrderDetailsDto> updateOrder(UUID id, OrderUpdateDto orderUpdate) {
+    Optional<Order> foundOrder = jpaOrderRepository.findById(id);
+
+    if (foundOrder.isEmpty()) return Optional.empty();
+
+    Order order = foundOrder.get();
+
+    order.setId(id);
+    order.setCity(orderUpdate.city());
+    order.setStreet(orderUpdate.street());
+    order.setPostNumber(orderUpdate.postNumber());
+    order.setStatus(orderUpdate.status());
+
+    jpaOrderRepository.updateOrder(order);
+    Optional<IOrderDetailsDto> newOrder = jpaOrderRepository.getSingleOrder(id);
+    return newOrder.map(iOrderDetailsDto -> orderMapper.toOrderDetailsDtoFromInterface(iOrderDetailsDto));
+  }
+
+  @Override
+  public boolean deleteOrder(UUID id) {
+    if (jpaOrderRepository.findById(id).isPresent()) {
+      jpaOrderRepository.deleteById(id);
       return true;
     }
     return false;
   }
+
+  @Override
+  public Optional<OrderDetailsDto> createNewOrder(CreateOrderDto createOrderDto){
+    try {
+      List<OrderProduct> opList = new ArrayList<>();
+      Order order = orderMapper.toOrderFromCreateOrderDto(createOrderDto);
+      Order newOrder = jpaOrderRepository.save(order);
+
+      for (CreateOrderProductDto op : createOrderDto.products()){
+        opList.add(orderProductMapper.toOrderProductFromCreateOrderDto(op, newOrder.getId()));
+      }
+      jpaOrderProductRepository.saveAllAndFlush(opList);
+
+      return findOrder(newOrder.getId());
+    } catch (Exception error) {
+      return Optional.empty();
+    }
+  }
+
 }

@@ -16,8 +16,7 @@ public class Payment {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @OneToOne
-  @JoinColumn(name = "order_id", referencedColumnName = "id")
+  @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
   private Order order;
 
   @Column(name="amount", columnDefinition = "numeric(24,2)")
@@ -28,6 +27,7 @@ public class Payment {
 
   @Column(name = "post_number", columnDefinition="bpchar(5)")
   private String postNumber;
-  private boolean paymentStatus;
 
+  @Column(name = "payment_status")
+  private boolean paymentStatus;
 }
