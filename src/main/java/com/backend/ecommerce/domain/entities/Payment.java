@@ -1,5 +1,6 @@
 package com.backend.ecommerce.domain.entities;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class Payment {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
+  @OneToOne
   private Order order;
 
   @Column(name="amount", columnDefinition = "numeric(24,2)")
@@ -28,6 +29,6 @@ public class Payment {
   @Column(name = "post_number", columnDefinition="bpchar(5)")
   private String postNumber;
 
-  @Column(name = "payment_status")
+  @Column(name = "paymentStatus")
   private boolean paymentStatus;
 }
