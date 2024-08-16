@@ -1,7 +1,7 @@
 package com.backend.ecommerce.application.dto.order;
 
 import com.backend.ecommerce.application.dto.CreateOrderProductDto;
-import com.backend.ecommerce.application.dto.payment.CreatePayment;
+import com.backend.ecommerce.application.dto.payment.UpdatePaymentDto;
 
 import java.util.Date;
 import java.util.List;
@@ -16,5 +16,5 @@ public record CreateOrderDto (
   String status,
   Date date,
   List<CreateOrderProductDto> products,
-  CreatePayment payment
+  UpdatePaymentDto payment
 ){}
