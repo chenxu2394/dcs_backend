@@ -18,6 +18,16 @@ import java.util.UUID;
 @Setter
 @Getter
 public class User implements UserDetails {
+
+    public User(){}
+
+    public User(String name, String email, String password, UserRole role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.userRole = role;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")

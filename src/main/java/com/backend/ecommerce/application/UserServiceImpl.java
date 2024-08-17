@@ -4,6 +4,8 @@ import com.backend.ecommerce.abstraction.UserService;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,4 +28,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var result = userRepository.getUserByEmail(username);
+
+        return result.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 }

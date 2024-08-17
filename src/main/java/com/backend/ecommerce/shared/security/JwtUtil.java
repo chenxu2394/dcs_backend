@@ -1,4 +1,4 @@
-package com.backend.ecommerce.shared.exceptions.security;
+package com.backend.ecommerce.shared.security;
 
 import com.backend.ecommerce.domain.entities.User;
 

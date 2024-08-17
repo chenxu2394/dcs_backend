@@ -27,16 +27,17 @@ public class UserRepository implements IUserRepository {
     public Optional<User> getUserById(UUID id) {
         return jpaUserRepository.findById(id);
     }
-//
-//    @Override
-//    public boolean createUser(User user) {
-//        try {
-//            this.users.add(user);
-//            return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return jpaUserRepository.findByEmail(email);
+    }
+
+    @Override
+    public User save(User user) {
+        jpaUserRepository.save(user);
+        return user;
+    }
 //
 //    @Override
 //    public boolean updateUser(User user) {
