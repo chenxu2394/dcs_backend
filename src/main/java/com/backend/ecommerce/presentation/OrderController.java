@@ -23,7 +23,6 @@ public class OrderController {
 
   @GetMapping
   public List<IOrderDto> findAll(@RequestParam("paid") Optional<Boolean> status, @RequestParam("user") Optional<UUID> id) {
-    System.out.println(status);
     if (status.isPresent()){
       return orderService.getAllOrdersByPaymentStatus(status.get());
     }

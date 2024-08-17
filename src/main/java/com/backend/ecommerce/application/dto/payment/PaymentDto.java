@@ -1,9 +1,14 @@
 package com.backend.ecommerce.application.dto.payment;
 
-public record CreatePayment(
+import java.util.UUID;
+
+public record PaymentDto(
+        UUID id,
+        UUID orderId,
         float amount,
         String city,
         String street,
         String postNumber,
-        boolean payment_status
-) {}
+        boolean paymentStatus
+) {
+}
