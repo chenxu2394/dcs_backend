@@ -11,8 +11,10 @@ import com.backend.ecommerce.application.dto.dtoInterfaces.IOrderDto;
 import com.backend.ecommerce.application.mapper.OrderProductMapper;
 import com.backend.ecommerce.domain.entities.Order;
 import com.backend.ecommerce.domain.entities.OrderProduct;
+import com.backend.ecommerce.domain.entities.Payment;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderProductRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaOrderRepository;
+import com.backend.ecommerce.infastructure.jpaRepositories.JpaPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class OrderServiceImpl implements OrderService {
   JpaOrderRepository jpaOrderRepository;
   @Autowired
   JpaOrderProductRepository jpaOrderProductRepository;
+  @Autowired
+  JpaPaymentRepository jpaPaymentRepository;
 
 
   @Autowired
@@ -39,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public List<IOrderDto> getOrdersByUserId(UUID id){
-    return jpaOrderRepository.getUsersOrders(id);
+    return jpaOrderRepository.getUserOrders(id);
   }
 
   @Override
@@ -49,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Optional<OrderDetailsDto> findOrder(UUID id) {
-    Optional<IOrderDetailsDto> order = jpaOrderRepository.getSingleOrder(id);
+    Optional<IOrderDetailsDto> order = jpaOrderRepository.getOrderDetails(id);
     return order.map(iOrderDetailsDto -> orderMapper.toOrderDetailsDtoFromInterface(iOrderDetailsDto));
   }
 
@@ -68,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     order.setStatus(orderUpdate.status());
 
     jpaOrderRepository.updateOrder(order);
-    Optional<IOrderDetailsDto> newOrder = jpaOrderRepository.getSingleOrder(id);
+    Optional<IOrderDetailsDto> newOrder = jpaOrderRepository.getOrderDetails(id);
     return newOrder.map(iOrderDetailsDto -> orderMapper.toOrderDetailsDtoFromInterface(iOrderDetailsDto));
   }
 
@@ -86,12 +90,17 @@ public class OrderServiceImpl implements OrderService {
     try {
       List<OrderProduct> opList = new ArrayList<>();
       Order order = orderMapper.toOrderFromCreateOrderDto(createOrderDto);
+      Payment payment = order.getPayment();
+      payment.setOrder(order);
+
       Order newOrder = jpaOrderRepository.save(order);
 
       for (CreateOrderProductDto op : createOrderDto.products()){
         opList.add(orderProductMapper.toOrderProductFromCreateOrderDto(op, newOrder.getId()));
       }
+      
       jpaOrderProductRepository.saveAllAndFlush(opList);
+      jpaPaymentRepository.save(payment);
 
       return findOrder(newOrder.getId());
     } catch (Exception error) {

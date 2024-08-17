@@ -33,7 +33,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, UUID> {
           "INNER JOIN ecommerce.payment AS p ON p.id = o.payment_id " +
           "WHERE o.id = ?1;",
           nativeQuery = true)
-  public Optional<IOrderDetailsDto> getSingleOrder(UUID id);
+  public Optional<IOrderDetailsDto> getOrderDetails(UUID id);
 
 
   @Query(value = "SELECT o.id as Id, u.id as UserId, u.name as UserName, " +
@@ -52,7 +52,7 @@ public interface JpaOrderRepository extends JpaRepository<Order, UUID> {
           "INNER JOIN ecommerce.payment AS p ON p.id = o.payment_id\n" +
           "WHERE u.id = ?1;",
           nativeQuery = true)
-  public List<IOrderDto> getUsersOrders(UUID id);
+  public List<IOrderDto> getUserOrders(UUID id);
 
   @Transactional
   @Modifying

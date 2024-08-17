@@ -1,6 +1,7 @@
 package com.backend.ecommerce.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -30,6 +31,12 @@ public class Order {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
   private List<OrderProduct> orderProducts = new ArrayList<>();
 
+  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  @JoinColumn(name = "payment_id", referencedColumnName = "id")
+  @JsonManagedReference
+  private Payment payment;
+
   @Column(name = "status")
   private String status;
 
@@ -45,8 +52,5 @@ public class Order {
   @Column(name = "date", columnDefinition = "date")
   private LocalDateTime date;
 
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  @JoinColumn(name = "payment_id", referencedColumnName = "id")
-  private Payment payment;
+
 }
