@@ -2,6 +2,8 @@ package com.backend.ecommerce.presentation;
 
 
 import com.backend.ecommerce.abstraction.UserService;
+import com.backend.ecommerce.application.AuthServiceImpl;
+import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.domain.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,11 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final AuthServiceImpl authService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthServiceImpl authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @GetMapping()
@@ -30,4 +34,10 @@ public class UserController {
         var user = userService.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterDto registerDto){
+        return authService.register(registerDto);
+    }
+
 }
