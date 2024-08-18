@@ -1,7 +1,7 @@
 package com.backend.ecommerce.infastructure.repositories;
 
 import com.backend.ecommerce.domain.entities.User;
-import com.backend.ecommerce.domain.interfaces.IUserRepository;
+import com.backend.ecommerce.domain.interfaces.UserRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,11 +10,11 @@ import java.util.UUID;
 import java.util.Optional;
 
 @Repository
-public class UserRepository implements IUserRepository {
+public class UserRepositoryImpl implements UserRepository {
 
     private final JpaUserRepository jpaUserRepository;
 
-    public UserRepository(JpaUserRepository jpaUserRepository) {
+    public UserRepositoryImpl(JpaUserRepository jpaUserRepository) {
         this.jpaUserRepository = jpaUserRepository;
     }
 
