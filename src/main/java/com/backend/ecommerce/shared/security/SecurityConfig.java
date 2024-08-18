@@ -1,7 +1,6 @@
 package com.backend.ecommerce.shared.security;
 
-import com.backend.ecommerce.application.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.backend.ecommerce.application.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,12 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserServiceImpl userService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthFilter authFilter;
 
-    public SecurityConfig(UserServiceImpl userService, AuthFilter authFilter) {
-        this.userService = userService;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthFilter authFilter) {
+        this.userDetailsService = userDetailsService;
         this.authFilter = authFilter;
     }
 
@@ -42,7 +41,7 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
-                .userDetailsService(userService)
+                .userDetailsService(userDetailsService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
