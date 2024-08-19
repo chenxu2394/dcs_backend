@@ -1,6 +1,6 @@
 package com.backend.ecommerce.shared.security;
 
-import com.backend.ecommerce.application.UserServiceImpl;
+import com.backend.ecommerce.application.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,11 +17,11 @@ import java.io.IOException;
 @Component
 public class AuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final UserServiceImpl userService;
+    private final UserDetailsServiceImpl userService;
 
-    public AuthFilter(JwtUtil jwtUtil, UserServiceImpl userService) {
+    public AuthFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
-        this.userService = userService;
+        this.userService = userDetailsService;
     }
 
     @Override

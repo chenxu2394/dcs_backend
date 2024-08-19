@@ -5,7 +5,6 @@ import com.backend.ecommerce.domain.enums.UserRole;
 public record RegisterDto(
         String email,
         String name,
-        String password,
-        UserRole role
+        String password
 ) {
 }

@@ -2,7 +2,8 @@ package com.backend.ecommerce.application;
 
 import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.domain.entities.User;
-import com.backend.ecommerce.infastructure.repositories.UserRepository;
+import com.backend.ecommerce.domain.enums.UserRole;
+import com.backend.ecommerce.infastructure.repositories.UserRepositoryImpl;
 import com.backend.ecommerce.shared.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +21,12 @@ import java.util.UUID;
 @Service
 public class AuthServiceImpl {
 
-    private final UserRepository userRepo;
+    private final UserRepositoryImpl userRepo;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(UserRepository userRepo, JwtUtil jwtUtil, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepositoryImpl userRepo, JwtUtil jwtUtil, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
@@ -35,8 +36,9 @@ public class AuthServiceImpl {
     public String register(RegisterDto registeredUser){
         var passwordEncoded = passwordEncoder.encode(registeredUser.password());
         //TODO make the default registered users as users
+        // attempt to make a registered user as a normal user, not admin
         User user = new User(registeredUser.name(), registeredUser.email(), passwordEncoded,
-                registeredUser.role());
+                UserRole.USER);
 
         userRepo.save(user);
 

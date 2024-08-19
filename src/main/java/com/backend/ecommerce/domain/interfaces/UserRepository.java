@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface IUserRepository {
+public interface UserRepository {
     public List<User> getAllUsers();
     public Optional<User> getUserById(UUID id);
     public Optional<User> getUserByEmail(String email);
