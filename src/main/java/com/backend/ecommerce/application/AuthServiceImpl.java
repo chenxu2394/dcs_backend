@@ -1,5 +1,6 @@
 package com.backend.ecommerce.application;
 
+import com.backend.ecommerce.application.dto.user.LoginDto;
 import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.enums.UserRole;
@@ -8,6 +9,7 @@ import com.backend.ecommerce.shared.security.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,14 +47,17 @@ public class AuthServiceImpl {
         return jwtUtil.generateToken(user);
     }
 
-    public String authenticate(@RequestBody User user){
+    public String authenticate(@RequestBody LoginDto user){
+        try {
         Authentication auth = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(user.email(), user.password()));
+        }
+        catch (AuthenticationException e) {
+            return "Invalid Login Credentials";
+        }
 
-        if(!auth.isAuthenticated()) return "";
 
-
-        User userOptional = userRepo.getUserByEmail(user.getEmail())
+        User userOptional = userRepo.getUserByEmail(user.email())
                 .orElseThrow(() -> new UsernameNotFoundException("No user found"));
 
         return jwtUtil.generateToken(userOptional);

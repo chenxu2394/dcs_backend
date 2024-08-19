@@ -3,6 +3,7 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.application.AuthServiceImpl;
 import com.backend.ecommerce.application.UserDetailsServiceImpl;
+import com.backend.ecommerce.application.dto.user.LoginDto;
 import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.domain.entities.User;
 import org.springframework.http.ResponseEntity;
@@ -40,4 +41,8 @@ public class UserController {
         return authService.register(registerDto);
     }
 
+    @PostMapping("/login")
+    public String login(@RequestBody LoginDto loginDto){
+        return authService.authenticate(loginDto);
+    }
 }
