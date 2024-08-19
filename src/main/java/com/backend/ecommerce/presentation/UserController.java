@@ -3,14 +3,10 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.UserService;
 import com.backend.ecommerce.domain.entities.User;
-import com.backend.ecommerce.domain.interfaces.IUserRepository;
-import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
