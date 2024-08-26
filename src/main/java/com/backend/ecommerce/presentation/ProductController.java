@@ -29,6 +29,13 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> filterProductsBySearch(@RequestParam("q") String filter){
+        var products = productService.filterProductsBySearch(filter);
+
+        return ResponseEntity.ok(products);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") UUID id){
         var product = productService.getProductById(id);

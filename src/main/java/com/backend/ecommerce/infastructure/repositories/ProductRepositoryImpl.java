@@ -24,6 +24,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> filterProductsBySearch(String search) {
+        return jpaProductRepository.findByNameContaining(search);
+    }
+
+    @Override
     public Optional<Product> getProductById(UUID id) {
         return jpaProductRepository.findById(id);
     }

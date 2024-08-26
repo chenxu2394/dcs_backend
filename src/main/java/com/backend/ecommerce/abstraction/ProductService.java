@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface ProductService {
     public List<ProductDto> getAllProducts();
+    public List<ProductDto> filterProductsBySearch(String search);
     public Optional<ProductDto> getProductById(UUID id);
     public ProductDto addProduct(CreateProductDto product);
     public ProductDto updateProduct(UpdateProductDto product);

@@ -34,6 +34,12 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductListDto(products);
     }
 
+    public List<ProductDto> filterProductsBySearch(String search) {
+        var products = productRepository.filterProductsBySearch(search);
+
+        return productMapper.toProductListDto(products);
+    }
+
     public Optional<ProductDto> getProductById(UUID id) {
         var product = productRepository.getProductById(id);
 
