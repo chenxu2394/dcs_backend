@@ -36,7 +36,9 @@ public class SecurityConfig {
                         req -> req.requestMatchers(
                                         "/api/users/register",
                                         "/api/users/login",
-                                        "/api/products")
+                                        "/api/products",
+                                        "/api/products/**")
+                                //TODO make POST to products only possible to ADMIN
                                 .permitAll()
                                 .requestMatchers("/api/users").hasAnyAuthority("ADMIN")
                                 .anyRequest()
