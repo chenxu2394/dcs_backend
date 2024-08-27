@@ -29,9 +29,21 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+//    @GetMapping("/search")
+//    public ResponseEntity<List<ProductDto>> filterProductsBySearch(@RequestParam("q") String filter){
+//        var products = productService.filterProductsBySearch(filter);
+//
+//        return ResponseEntity.ok(products);
+//    }
+
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDto>> filterProductsBySearch(@RequestParam("q") String filter){
-        var products = productService.filterProductsBySearch(filter);
+    public ResponseEntity<List<ProductDto>> filterProductsBy(
+            @RequestParam("q") String search,
+            @RequestParam("categories") List<String> categories,
+            @RequestParam("minPrice") double minPrice,
+            @RequestParam("maxPrice") double maxPrice
+    ){
+        var products = productService.filterProductsBy(search, categories, minPrice, maxPrice);
 
         return ResponseEntity.ok(products);
     }

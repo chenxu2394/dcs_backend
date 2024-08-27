@@ -12,6 +12,12 @@ import java.util.UUID;
 public interface ProductService {
     public List<ProductDto> getAllProducts();
     public List<ProductDto> filterProductsBySearch(String search);
+    public List<ProductDto> filterProductsBy(
+            String search,
+            List<String> categories,
+            Double minPrice,
+            Double maxPrice
+    );
     public Optional<ProductDto> getProductById(UUID id);
     public ProductDto addProduct(CreateProductDto product);
     public ProductDto updateProduct(UpdateProductDto product);

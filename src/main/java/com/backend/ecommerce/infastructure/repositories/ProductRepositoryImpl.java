@@ -29,6 +29,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> filterProductsBy(String search, List<String> categories, double minPrice, double maxPrice) {
+        return jpaProductRepository.filterBy(search, categories, minPrice, maxPrice);
+    }
+
+    @Override
     public Optional<Product> getProductById(UUID id) {
         return jpaProductRepository.findById(id);
     }
