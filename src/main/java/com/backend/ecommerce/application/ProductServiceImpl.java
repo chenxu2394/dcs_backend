@@ -43,34 +43,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<ProductDto> filterProductsBy(String search, List<String> categories, Double minPrice, Double maxPrice) {
-        // Validate price constraints
-        if (minPrice != null && minPrice < 0 || maxPrice != null && maxPrice < 0) {
-            throw new BadRequestException("Price cannot be negative");
-        }
-        if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
-            throw new BadRequestException("Min price cannot be greater than max price");
-        }
-
-        // Set defaults for null values
-        if (search == null) {
-            search = "";
-        }
-        if (categories == null || categories.isEmpty()) {
-            categories = categoryRepository.getAllCategories().stream()
-                    .map(Category::getName)
-                    .collect(Collectors.toList());
-        }
+        // Complex validation and business rule enforcement
         if (minPrice == null) {
             minPrice = 0.0;
         }
         if (maxPrice == null) {
             maxPrice = Double.MAX_VALUE;
         }
+        if (minPrice < 0 || maxPrice < 0) {
+            throw new BadRequestException("Price cannot be negative");
+        }
+        if (minPrice > maxPrice) {
+            throw new BadRequestException("Min price cannot be greater than max price");
+        }
+
+        // Business logic based default setting
+        if (categories == null || categories.isEmpty()) {
+            categories = categoryRepository.getAllCategories().stream()
+                    .map(Category::getName)
+                    .collect(Collectors.toList());
+        }
 
         // Retrieve filtered products
         var products = productRepository.filterProductsBy(search, categories, minPrice, maxPrice);
         return productMapper.toProductListDto(products);
     }
+
 
     public Optional<ProductDto> getProductById(UUID id) {
         var product = productRepository.getProductById(id);

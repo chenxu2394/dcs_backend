@@ -9,6 +9,7 @@ import com.backend.ecommerce.domain.entities.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,28 +24,13 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductDto>> getProduct(){
-        var products = productService.getAllProducts();
-
-        return ResponseEntity.ok(products);
-    }
-
-//    @GetMapping("/search")
-//    public ResponseEntity<List<ProductDto>> filterProductsBySearch(@RequestParam("q") String filter){
-//        var products = productService.filterProductsBySearch(filter);
-//
-//        return ResponseEntity.ok(products);
-//    }
-
-    @GetMapping("/search")
     public ResponseEntity<List<ProductDto>> filterProductsBy(
-            @RequestParam("q") String search,
-            @RequestParam("categories") List<String> categories,
-            @RequestParam("minPrice") double minPrice,
-            @RequestParam("maxPrice") double maxPrice
+            @RequestParam(value = "q", required = false, defaultValue = "") String search,
+            @RequestParam(value = "categories", required = false) List<String> categories,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice
     ){
         var products = productService.filterProductsBy(search, categories, minPrice, maxPrice);
-
         return ResponseEntity.ok(products);
     }
 
