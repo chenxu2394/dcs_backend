@@ -37,7 +37,8 @@ public class SecurityConfig {
                                         "/api/users/register",
                                         "/api/users/login",
                                         "/api/products",
-                                        "/api/products/**")
+                                        "/api/products/**",
+                                        "/api/categories")
                                 //TODO make POST to products only possible to ADMIN
                                 .permitAll()
                                 .requestMatchers("/api/users").hasAnyAuthority("ADMIN")
