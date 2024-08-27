@@ -20,7 +20,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> getAllProducts() {
-        return jpaProductRepository.findAll().stream().toList();
+        return jpaProductRepository.findAll();
     }
 
     @Override
