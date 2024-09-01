@@ -3,6 +3,7 @@ package com.backend.ecommerce.infastructure.repositories;
 import com.backend.ecommerce.domain.entities.Product;
 import com.backend.ecommerce.domain.interfaces.ProductRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaProductRepository;
+import com.backend.ecommerce.shared.exceptions.BadRequestException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         var originalProduct = jpaProductRepository.findById(id);
 
         if (originalProduct.isEmpty()) {
-            return;
+            throw new BadRequestException("Product not found");
         }
         jpaProductRepository.deleteById(id);
     }
