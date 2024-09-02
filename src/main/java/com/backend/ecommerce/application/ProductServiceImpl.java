@@ -79,11 +79,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto addProduct(CreateProductDto product) {
         var newProduct = productMapper.toProduct(product);
 
-        var category = categoryRepository.findById(product.categoryId());
+        var category = categoryRepository.findById(product.categoryId())
+                .orElseThrow(() -> new BadRequestException("Category not found"));
 
-        if (category.isEmpty()){
-            throw new BadRequestException("Category not found");
-        }
+        newProduct.setCategory(category);
 
         newProduct = productRepository.addProduct(newProduct);
 
@@ -99,9 +98,9 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("Product not found");
         }
 
-        productRepository.updateProduct(updateProductDomain);
+        var res = productRepository.updateProduct(updateProductDomain);
 
-        return productMapper.toProductDto(updateProductDomain);
+        return productMapper.toProductDto(res);
     }
     public void deleteProduct(UUID id) {
         productRepository.deleteProduct(id);
