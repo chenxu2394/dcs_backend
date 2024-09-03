@@ -98,6 +98,11 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("Product not found");
         }
 
+        var category = categoryRepository.findById(product.categoryId())
+                .orElseThrow(() -> new BadRequestException("Category not found"));
+
+        updateProductDomain.setCategory(category);
+
         var res = productRepository.updateProduct(updateProductDomain);
 
         return productMapper.toProductDto(res);
