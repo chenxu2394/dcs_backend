@@ -1,7 +1,10 @@
 package com.backend.ecommerce.application;
 
+import com.backend.ecommerce.application.dto.user.ReturnedDto;
+import com.backend.ecommerce.application.mapper.UserMapper;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.UserRepository;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,13 +18,16 @@ import java.util.UUID;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+    public List<ReturnedDto> getAllUsers() {
+        List<User> users = userRepository.getAllUsers();
+        return users.stream().map(userMapper::toReturnedDto).toList();
     }
 
     public Optional<User> getUserById(UUID id) {
