@@ -19,5 +19,12 @@ public class GlobalExceptionHandler {
         System.out.println("Handling UniquenessException");
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    // handle io.jsonwebtoken.ExpiredJwtException
+    @ExceptionHandler(io.jsonwebtoken.ExpiredJwtException.class)
+    public ResponseEntity<String> handleExpiredJwtException(io.jsonwebtoken.ExpiredJwtException ex){
+        System.out.println("Handling ExpiredJwtException");
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
 }
 
