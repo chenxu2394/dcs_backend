@@ -3,6 +3,7 @@ package com.backend.ecommerce.infastructure.repositories;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.UserRepository;
 import com.backend.ecommerce.infastructure.jpaRepositories.JpaUserRepository;
+import com.backend.ecommerce.shared.exceptions.BadRequestException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -49,13 +50,13 @@ public class UserRepositoryImpl implements UserRepository {
 //        }
 //    }
 //
-//    @Override
-//    public boolean deleteUser(int id) {
-//        try {
-//            this.users.removeIf(user -> user.getId() == id);
-//            return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
+    @Override
+    public void deleteUser(UUID id) {
+        jpaUserRepository.findById(id).ifPresentOrElse(
+                jpaUserRepository::delete,
+                () -> {
+                    throw new BadRequestException("User not found");
+                }
+        );
+    }
 }

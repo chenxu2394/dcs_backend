@@ -45,4 +45,10 @@ public class UserController {
     public String login(@RequestBody LoginDto loginDto) {
         return authService.authenticate(loginDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
+        userDetailsServiceImpl.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
 }

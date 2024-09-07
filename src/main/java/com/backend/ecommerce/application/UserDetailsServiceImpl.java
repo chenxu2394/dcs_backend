@@ -40,4 +40,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return result.orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteUser(id);
+    }
 }
