@@ -54,6 +54,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
+        // Set the password from the old user to the updated user
+        updateUserDomain.setPassword(oldUser.get().getPassword());
+
         var res = userRepository.updateUser(updateUserDomain);
         return userMapper.toReturnedDto(res);
     }

@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
 
   @Mapping(target = "id", source = "id")
+  @Mapping(target = "password", ignore = true)
   User toUserFromUpdate(UpdateUserDto source);
 
   ReturnedDto toReturnedDto(User user);
