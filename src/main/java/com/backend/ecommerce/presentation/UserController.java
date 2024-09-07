@@ -5,6 +5,7 @@ import com.backend.ecommerce.application.UserDetailsServiceImpl;
 import com.backend.ecommerce.application.dto.user.LoginDto;
 import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.application.dto.user.ReturnedDto;
+import com.backend.ecommerce.application.dto.user.UpdateUserDto;
 import com.backend.ecommerce.domain.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,12 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestBody LoginDto loginDto) {
         return authService.authenticate(loginDto);
+    }
+
+    @PutMapping()
+    public ResponseEntity<ReturnedDto> updateUser(@RequestBody UpdateUserDto user) {
+        var updatedUser = userDetailsServiceImpl.updateUser(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")

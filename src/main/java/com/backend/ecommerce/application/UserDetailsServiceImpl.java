@@ -1,6 +1,7 @@
 package com.backend.ecommerce.application;
 
 import com.backend.ecommerce.application.dto.user.ReturnedDto;
+import com.backend.ecommerce.application.dto.user.UpdateUserDto;
 import com.backend.ecommerce.application.mapper.UserMapper;
 import com.backend.ecommerce.domain.entities.User;
 import com.backend.ecommerce.domain.interfaces.UserRepository;
@@ -43,5 +44,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void deleteUser(UUID id) {
         userRepository.deleteUser(id);
+    }
+
+    public ReturnedDto updateUser(UpdateUserDto user) {
+        var updateUserDomain = userMapper.toUserFromUpdate(user);
+        var oldUser = userRepository.getUserById(user.id());
+
+        if (oldUser.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        var res = userRepository.updateUser(updateUserDomain);
+        return userMapper.toReturnedDto(res);
     }
 }

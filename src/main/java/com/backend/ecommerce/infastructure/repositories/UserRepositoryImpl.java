@@ -39,17 +39,13 @@ public class UserRepositoryImpl implements UserRepository {
         jpaUserRepository.save(user);
         return user;
     }
-//
-//    @Override
-//    public boolean updateUser(User user) {
-//        try {
-//            this.users.set(this.users.indexOf(user), user);
-//            return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-//
+
+    @Override
+    public User updateUser(User user) {
+        jpaUserRepository.save(user);
+        return user;
+    }
+
     @Override
     public void deleteUser(UUID id) {
         jpaUserRepository.findById(id).ifPresentOrElse(
