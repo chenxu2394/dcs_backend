@@ -26,6 +26,7 @@ public class JwtUtil {
                 .builder()
                 .subject(user.getUsername())
                 .claim("user_id", user.getId())
+                .claim("user_name", user.getName())
                 .claim("user_role", user.getUserRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
