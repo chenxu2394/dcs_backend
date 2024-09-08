@@ -6,10 +6,13 @@ import com.backend.ecommerce.application.dto.product.ProductDto;
 import com.backend.ecommerce.application.dto.product.UpdateProductDto;
 import com.backend.ecommerce.application.mapper.ProductMapper;
 import com.backend.ecommerce.domain.entities.Category;
+import com.backend.ecommerce.domain.entities.Product;
 import com.backend.ecommerce.domain.interfaces.CategoryRepository;
 import com.backend.ecommerce.domain.interfaces.ProductRepository;
 import com.backend.ecommerce.shared.exceptions.BadRequestException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductListDto(products);
     }
 
-    public List<ProductDto> filterProductsBy(String search, List<String> categories, Double minPrice, Double maxPrice) {
+    public Page<ProductDto> filterProductsBy(String search, List<String> categories, Double minPrice, Double maxPrice, Pageable pageable) {
         // Complex validation and business rule enforcement
         if (minPrice == null) {
             minPrice = 0.0;
@@ -65,8 +68,8 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // Retrieve filtered products
-        var products = productRepository.filterProductsBy(search, categories, minPrice, maxPrice);
-        return productMapper.toProductListDto(products);
+        Page<Product> products = productRepository.filterProductsBy(search, categories, minPrice, maxPrice, pageable);
+        return products.map(productMapper::toProductDto);
     }
 
 

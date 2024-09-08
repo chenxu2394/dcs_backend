@@ -1,5 +1,8 @@
 package com.backend.ecommerce.presentation;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import com.backend.ecommerce.abstraction.ProductService;
 import com.backend.ecommerce.application.ProductServiceImpl;
 import com.backend.ecommerce.application.dto.product.CreateProductDto;
@@ -24,13 +27,16 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductDto>> filterProductsBy(
+    public ResponseEntity<Page<ProductDto>> filterProductsBy(
             @RequestParam(value = "q", required = false, defaultValue = "") String search,
             @RequestParam(value = "categories", required = false) List<String> categories,
             @RequestParam(value = "minPrice", required = false) Double minPrice,
-            @RequestParam(value = "maxPrice", required = false) Double maxPrice
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
     ){
-        var products = productService.filterProductsBy(search, categories, minPrice, maxPrice);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductDto> products = productService.filterProductsBy(search, categories, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(products);
     }
 
