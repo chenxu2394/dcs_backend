@@ -30,4 +30,10 @@ public class CategoryController {
         var result = categoryService.addCategory(category);
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping()
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category){
+        var result = categoryService.updateCategory(category);
+        return ResponseEntity.ok(result);
+    }
 }

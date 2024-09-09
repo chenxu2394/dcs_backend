@@ -39,4 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
         var categoryEntity = categoryMapper.toCategory(category);
         return categoryRepository.addCategory(categoryEntity);
     }
+
+    @Override
+    public Category updateCategory(Category category) {
+        return categoryRepository.updateCategory(category);
+    }
 }
