@@ -13,5 +13,5 @@ public interface CategoryService {
     public Optional<CategoryDto> getCategoryById(UUID id);
     public Category addCategory(CreateCategoryDto category);
     public Category updateCategory(Category category);
-//    public void deleteCategory(UUID id);
+    public void deleteCategory(UUID id);
 }
