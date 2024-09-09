@@ -32,9 +32,15 @@ public class ProductController {
             @RequestParam(value = "categories", required = false) List<String> categories,
             @RequestParam(value = "minPrice", required = false) Double minPrice,
             @RequestParam(value = "maxPrice", required = false) Double maxPrice,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size
     ){
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = Integer.MAX_VALUE;
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductDto> products = productService.filterProductsBy(search, categories, minPrice, maxPrice, pageable);
         return ResponseEntity.ok(products);
