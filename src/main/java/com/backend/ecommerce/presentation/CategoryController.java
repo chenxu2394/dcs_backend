@@ -2,10 +2,10 @@ package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.abstraction.CategoryService;
 import com.backend.ecommerce.application.dto.product.category.CategoryDto;
+import com.backend.ecommerce.application.dto.product.category.CreateCategoryDto;
+import com.backend.ecommerce.domain.entities.Category;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +23,11 @@ public class CategoryController {
         var categories = categoryService.getAllCategories();
 
         return ResponseEntity.ok(categories);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Category> createCategory(@RequestBody CreateCategoryDto category){
+        var result = categoryService.addCategory(category);
+        return ResponseEntity.ok(result);
     }
 }

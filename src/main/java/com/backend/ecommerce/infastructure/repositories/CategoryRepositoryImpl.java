@@ -25,4 +25,21 @@ public class CategoryRepositoryImpl implements com.backend.ecommerce.domain.inte
     public Optional<Category> findById(UUID id) {
         return jpaCategoryRepository.findById(id);
     }
+
+    @Override
+    public Category addCategory(Category category) {
+        jpaCategoryRepository.save(category);
+        return category;
+    }
+
+    @Override
+    public Category updateCategory(Category category) {
+        jpaCategoryRepository.save(category);
+        return category;
+    }
+
+    @Override
+    public void deleteCategory(UUID id) {
+        jpaCategoryRepository.deleteById(id);
+    }
 }

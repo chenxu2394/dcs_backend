@@ -11,4 +11,7 @@ import java.util.UUID;
 public interface CategoryRepository {
     public List<Category> getAllCategories();
     public Optional<Category> findById(UUID id);
+    public Category addCategory(Category category);
+    public Category updateCategory(Category category);
+    public void deleteCategory(UUID id);
 }
