@@ -8,6 +8,7 @@ import com.backend.ecommerce.application.dto.user.ReturnedDto;
 import com.backend.ecommerce.application.dto.user.UpdateUserDto;
 import com.backend.ecommerce.domain.entities.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or #id.toString() == authentication.principal.getId().toString()")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") UUID id) {
         var user = userDetailsServiceImpl.getUserById(id);
