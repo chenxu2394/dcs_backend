@@ -1,7 +1,7 @@
 package com.backend.ecommerce.presentation;
 
 import com.backend.ecommerce.application.AuthServiceImpl;
-import com.backend.ecommerce.application.UserDetailsServiceImpl;
+import com.backend.ecommerce.abstraction.UserService;
 import com.backend.ecommerce.application.dto.user.LoginDto;
 import com.backend.ecommerce.application.dto.user.RegisterDto;
 import com.backend.ecommerce.application.dto.user.ReturnedDto;
@@ -18,24 +18,24 @@ import java.util.UUID;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final AuthServiceImpl authService;
+    private final UserService userServiceImpl;
 
-    public UserController(UserDetailsServiceImpl userDetailsServiceImpl, AuthServiceImpl authService) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
+    public UserController(AuthServiceImpl authService, UserService userServiceImpl) {
         this.authService = authService;
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping()
     public ResponseEntity<List<ReturnedDto>> getAllUsers() {
-        var users = userDetailsServiceImpl.getAllUsers();
+        var users = userServiceImpl.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or #id.toString() == authentication.principal.getId().toString()")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") UUID id) {
-        var user = userDetailsServiceImpl.getUserById(id);
+        var user = userServiceImpl.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -51,13 +51,13 @@ public class UserController {
 
     @PutMapping()
     public ResponseEntity<ReturnedDto> updateUser(@RequestBody UpdateUserDto user) {
-        var updatedUser = userDetailsServiceImpl.updateUser(user);
+        var updatedUser = userServiceImpl.updateUser(user);
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") UUID id) {
-        userDetailsServiceImpl.deleteUser(id);
+        userServiceImpl.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }

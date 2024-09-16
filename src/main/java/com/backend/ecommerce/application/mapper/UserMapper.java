@@ -15,5 +15,9 @@ public interface UserMapper {
   @Mapping(target = "password", ignore = true)
   User toUserFromUpdate(UpdateUserDto source);
 
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "email", source = "email")
+  @Mapping(target = "name", source = "name")
+  @Mapping(target = "userRole", source = "userRole")
   ReturnedDto toReturnedDto(User user);
 }
