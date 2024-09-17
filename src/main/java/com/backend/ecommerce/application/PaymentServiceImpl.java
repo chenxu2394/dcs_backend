@@ -28,7 +28,7 @@ public class PaymentServiceImpl implements PaymentService {
     List<Payment> paymentList = jpaPaymentRepository.findAll();
     List<PaymentDto> paymentListDetailDtoList = new ArrayList<>();
     for (Payment payment : paymentList){
-      paymentListDetailDtoList.add(paymentMapper.toPaymenDtoFromPayment(payment));
+      paymentListDetailDtoList.add(paymentMapper.toPaymentDtoFromPayment(payment));
     }
     return paymentListDetailDtoList;
   }
@@ -46,6 +46,6 @@ public class PaymentServiceImpl implements PaymentService {
     payment.setPostNumber(updatePaymentDto.postNumber());
 
     jpaPaymentRepository.updatePayment(payment);
-    return Optional.of(paymentMapper.toPaymenDtoFromPayment(payment));
+    return Optional.of(paymentMapper.toPaymentDtoFromPayment(payment));
   }
 }

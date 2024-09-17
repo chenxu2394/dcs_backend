@@ -10,5 +10,5 @@ import org.mapstruct.Mapping;
 public interface PaymentMapper {
 
   @Mapping(target = "orderId", source = "payment.order.id")
-  PaymentDto toPaymenDtoFromPayment(Payment payment);
+  PaymentDto toPaymentDtoFromPayment(Payment payment);
 }
