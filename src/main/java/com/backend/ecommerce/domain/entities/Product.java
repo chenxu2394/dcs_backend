@@ -28,4 +28,6 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product")
     private List<OrderProduct> orderProduct = new ArrayList<OrderProduct>();
+    @Column(name = "image_urls", columnDefinition = "TEXT[]")
+    private List<String> imageUrls;
 }
