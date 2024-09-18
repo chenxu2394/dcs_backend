@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -30,21 +31,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-//                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(
-                                        "/api/users/register",
-                                        "/api/users/login",
-                                        "/api/products",
-                                        "/api/products/**",
-                                        "/api/categories")
-                                //TODO make POST to products only possible to ADMIN
+                        req -> req
+                                .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**")
                                 .permitAll()
-                                .requestMatchers("/api/users").hasAnyAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/users/register", "/api/users/login")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/categories/**")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers("/api/users/**").hasAuthority("ADMIN")
                                 .anyRequest()
-                                .authenticated()
-                )
+                                .authenticated())
                 .userDetailsService(userDetailsService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
@@ -52,7 +54,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
