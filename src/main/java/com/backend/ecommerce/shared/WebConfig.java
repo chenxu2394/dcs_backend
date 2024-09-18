@@ -1,6 +1,5 @@
 package com.backend.ecommerce.shared;
 
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -15,7 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "https://fs18-java-frontend-sable.vercel.app") // Define your allowed origins here
+                .allowedOrigins(
+                        "http://localhost:3000",
+                        "https://fs18-java-frontend-sable.vercel.app",
+                        "https://digital-coins-store.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type");
     }
