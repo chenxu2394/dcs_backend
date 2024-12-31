@@ -30,22 +30,5 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ecmacr657.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_583705c90b2243bdb8d064c036275bec }}/dcstest:${{ github.sha }}
+        tags: ecmacr657.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_583705c90b2243bdb8d064c036275bec }}/dcstest:latest
         file: ./Dockerfile
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'dcstest'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e10fe37df0374bbb886b4890048fbcc5 }}
-        images: 'ecmacr657.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_583705c90b2243bdb8d064c036275bec }}/dcstest:${{ github.sha }}'
