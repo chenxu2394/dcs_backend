@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:3000",
                         "https://fs18-java-frontend-sable.vercel.app",
-                        "https://digital-coins-store.vercel.app")
+                        "https://digital-coins-store.vercel.app",
+                        "https://digital-coins-store.azurewebsites.net")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type");
     }
